@@ -17,10 +17,15 @@
 </div>
 <hr>
 
-<div>
+<div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
     <p class="badge-principal">Livros Disponíveis</p>
+    <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Pesquisar por Título" aria-label="Search" />
+        <button class="btn btn-sm btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+    </form>
 </div>
-<section class="titulos">
+
+<section class="acervo">
     <div>
         <table class="table table-hover shadow p-3 mb-5 bg-body-tertiary rounded" style="text-align: center;">
             <thead>
@@ -28,20 +33,50 @@
                     <th scope="col">Código</th>
                     <th scope="col">Capa</th>
                     <th scope="col">Titulo</th>
+                    <th scope="col">Autor</th>
                     <th scope="col">Área do Conhecimento</th>
+                    <th scope="col">Quantidade Disponível</th>
                     <th scope="col">Situação</th>
                 </tr>
             </thead>
             <tbody>
+                {% for livro in dados_livros %}
                 <tr>
-                    <th scope="row">Redes de Computadores Tannabaum</th>
-                    <td>UFAL Arapira Sede</td>
-                    <td>21/10/2025</td>
-                    <td>31/10/2025</td>
-                    <td><i class="bi bi-check-circle-fill" style="color: darkgreen;"></i></td>
+                    <th scope="row">{{ livro['cod'] }}</th>
+                    <td><img src="{{ livro['capa'] }}" width="auto" height="40px" alt="Capa livro"></td>
+                    <td>{{ livro['titulo'] }}</td>
+                    <td>{{ livro['autor'] }}</td>
+                    <td>{{ livro['area_conhecimento'] }}</td>
+                    <td>{{ livro['quantidade'] }}</td>
+                    <td>
+                        {{ livro['status'] }}
+                        {% if livro['status'] == 'disponivel' %}
+                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        {% else %}
+                        <i class="bi bi-x-circle-fill" style="color: rgb(251, 5, 5);"></i>
+                        {% endif %}
+                    </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </section>
 

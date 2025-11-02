@@ -1,7 +1,6 @@
 from main import app 
 from flask import render_template, url_for, redirect, request, flash, session
 from models import extrairDados, salvarDados
-dados = extrairDados()
 
 @app.route('/')
 def raiz():
@@ -24,12 +23,13 @@ def cadastro():
             flash('Senhas informadas não coincidem', 'warning')
             return redirect(url_for('cadastro'))
         
-        dados.append({
+        dados_usuarios = extrairDados('registros')
+        dados_usuarios.append({
             "matricula":matricula,
             "nome_completo":nome_completo,
             "email":email,
             "senha":senha}) # dava para usar o hash na senha, furutramente implementar isso para não salvar a senha de forma crua
-        salvarDados(dados)
+        salvarDados(dados_usuarios)
         flash('Cadastro criado com sucesso! Faça o login!', 'success')
         return redirect(url_for('cadastro'))
         
@@ -44,8 +44,9 @@ def login():
         print(matricula, senha)
         
         # verificar se os dados informados estao cadastrados no aquivo json
+        dados_usuarios = extrairDados('registros')
         login_sucesso = False
-        for registro in dados:
+        for registro in dados_usuarios:
             if registro['matricula'] == matricula and registro['senha'] == senha:
                 login_sucesso = True
                 usuario = registro
@@ -78,7 +79,9 @@ def inicio():
 
 @app.route('/biblioteca/acervo_digital')
 def acervo():
-    return render_template('acervo.html')
+    dados_livros = extrairDados('livros')
+    print(dados_livros)
+    return render_template('acervo.html', dados_livros=dados_livros)
 
 @app.route('/biblioteca/sobre')
 def sobre():
