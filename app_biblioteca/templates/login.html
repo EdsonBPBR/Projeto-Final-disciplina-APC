@@ -1,0 +1,36 @@
+{% extends '_layouts/base_projeto.html' %}
+
+{% block head %}
+<title>Login</title>
+<link rel="stylesheet" href="../.././static/css/style_login.css">
+{% endblock %}
+
+{% block conteudo_main %}
+
+<section class="login">
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <div>
+            <img src="../static/img/logo_ufal.webp" alt="Logo ufal">
+        </div>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="matricula" class="form-label">Matricula</label>
+                <input type="text" name="matricula" class="form-control" id="matricula"
+                    aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">Informe a matricula no ato do cadastro.</div>
+            </div>
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" name="senha" class="form-control" id="senha" required>
+            </div>
+            <div class="campo-botao">
+                <button type="submit" class="btn btn-primary botao">Acessar</button>
+            </div>
+            <div class="campo-links">
+                <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
+                <a href="#">Recuperar Senha</a>
+            </div>
+        </form>
+    </div>
+</section> 
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends '_layouts/base_projeto.html' %}
+
+{% block head %}
+<title>Cadastro</title>
+<link rel="stylesheet" href="../.././static/css/style_cadastro.css">
+{% endblock %}
+
+{% block conteudo_main %}
+<section class="cadastro">
+    <div class="shadow p-3 mb-5 bg-body-tertiary rounded">
+        <h4 style="text-align: center;">Cadastre-se!</h4>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="matricula" class="form-label">Matricula</label>
+                <input type="text" name="matricula" class="form-control" id="matricula" aria-describedby="emailHelp"
+                    required>
+            </div>
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome Completo</label>
+                <input type="text" name="nome" class="form-control" id="nome" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail Institucional</label>
+                <input type="email" name="email" class="form-control" id="email" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">Caso não possua, acesse: <a target="_blank"
+                        href="https://perfil.ufal.br">perfil.ufal.br</a></div>
+            </div>
+            <hr>
+            <div class="mb-3">
+                <label for="senha" class="form-label">Senha</label>
+                <input type="password" name="senha" class="form-control" id="senha" required>
+            </div>
+            <div class="mb-3">
+                <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+                <input type="password" name="confirmar_senha" class="form-control" id="confirmar_senha" required>
+            </div>
+            <div class="campo-botao">
+                <button type="submit" class="btn btn-primary botao">Cadastrar</button>
+                <button type="reset" class="btn btn-danger">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
