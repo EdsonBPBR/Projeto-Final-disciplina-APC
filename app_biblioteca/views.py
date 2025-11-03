@@ -1,4 +1,5 @@
 from main import app 
+from datetime import date, timedelta
 from flask import render_template, url_for, redirect, request, flash, session
 from models import extrairDados, salvarDados
 
@@ -29,7 +30,7 @@ def cadastro():
             "nome_completo":nome_completo,
             "email":email,
             "senha":senha}) # dava para usar o hash na senha, furutramente implementar isso para não salvar a senha de forma crua
-        salvarDados(dados_usuarios)
+        salvarDados(dados_usuarios, 'registros')
         flash('Cadastro criado com sucesso! Faça o login!', 'success')
         return redirect(url_for('cadastro'))
         
@@ -69,21 +70,98 @@ def login():
 
 @app.route('/biblioteca')
 def inicio():
-    if not('usuario' in session): # se na chave 'usuario' não estiver presente no dicionario sessao
+    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login'))
-    
+
     usuario = session['usuario'] 
-    
     return render_template('inicio.html', usuario=usuario)
+    # ainda falta desenvolver futuramente aqui
 
 @app.route('/biblioteca/acervo_digital')
 def acervo():
+    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
+        flash('Faça o login para acessar o sistema!', 'warning')
+        return redirect(url_for('login'))
+    
     dados_livros = extrairDados('livros')
     print(dados_livros)
     return render_template('acervo.html', dados_livros=dados_livros)
+
+@app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
+def emprestimo_livro(id): 
+    
+    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
+        flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
+        return redirect(url_for('login'))
+    
+    dados = extrairDados('livros')
+    for registro in dados:
+        if registro['cod'] == id:
+            livro = registro
+            break
+    
+    caminho_capa = livro['capa']
+    ultimo_nome = caminho_capa.split('/')[-1]
+    
+    info_livro = {
+        'cod': livro['cod'],
+        'capa': ultimo_nome,
+        'titulo': livro['titulo'],
+        'quantidade': livro['quantidade'],
+        'autor': livro['autor'],
+        'area_conhecimento': livro['area_conhecimento'],
+        'status': livro['status'],
+        'biblioteca': livro['biblioteca']
+    }
+    
+    # implementar o requisito: se o usuário já possui mais de 3 livros cadastrados, a mensagem: 'Você pode obter esse livro! ' tem que alterar conforme o problema do usuário e desativar o botão: 'obter livro'
+    
+    if request.method == 'POST':
+        flash(f'Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a BIBLIOTECA UFAL ARAPIRACA SEDE para retirada', 'success')
+
+        data_emprestimo = date.today()
+        data_devolucao = data_emprestimo + timedelta(days=15)
+        dados_livros = extrairDados('emprestimos')
+        
+        livro_emprestado = {
+            'matricula_usuario': session['usuario']['matricula'],
+            'email_usuario': session['usuario']['email'],
+            'cod_livro': info_livro['cod'],
+            'titulo': info_livro['titulo'],
+            'autor': info_livro['autor'],
+            'data_emprestimo': data_emprestimo.strftime('%d/%m/%Y'),
+            'data_devolucao': data_devolucao.strftime('%d/%m/%Y')
+        }
+        
+        dados_livros.append(livro_emprestado)
+        print(dados_livros)
+        salvarDados(dados_livros, 'emprestimos')
+        # ainda inserir sistema para remover o 
+        return redirect(url_for('emprestimos'))
+    return render_template('emprestimo_livro.html', livro = info_livro)
+
+@app.route('/biblioteca/emprestimos')
+def emprestimos():
+    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
+        flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
+        return redirect(url_for('login'))
+    
+    # print(session['usuario']['matricula'])
+    livros_emprestados = [] # resolvemos adicionar os livros no dicionario, pois cada livro emprestado é único, não existirá a repetição de outro mesmo livro
+    
+    dados_livros = extrairDados('emprestimos')
+    for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
+        if session['usuario']['matricula'] == registro['matricula_usuario']:
+            livros_emprestados.append((registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao']))
+    
+    return render_template('emprestimos.html', info_livros_emprestados = livros_emprestados)
 
 @app.route('/biblioteca/sobre')
 def sobre():
     return '<h1>Sobre o projeto da biblioteca online</h1>'
 
+def verificaUsuarioLogado(session):
+    logado = 'usuario' in session
+    return not(logado)
+    # eu tentei colocar a decisão dentro da funmção mas dá erro, num sei pq

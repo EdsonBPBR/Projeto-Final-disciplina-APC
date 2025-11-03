@@ -49,11 +49,11 @@
                     <td>{{ livro['area_conhecimento'] }}</td>
                     <td>{{ livro['quantidade'] }}</td>
                     <td>
-                        {{ livro['status'] }}
                         {% if livro['status'] == 'disponivel' %}
-                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        <a href="{{ url_for('emprestimo_livro', id=livro['cod']) }}">{{ livro['status'].title()  }} <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i></a>
+                        
                         {% else %}
-                        <i class="bi bi-x-circle-fill" style="color: rgb(251, 5, 5);"></i>
+                        {{ livro['status'].title() }} <i class="bi bi-x-circle-fill" style="color: rgb(251, 5, 5);"></i>
                         {% endif %}
                     </td>
                 </tr>

@@ -1,0 +1,103 @@
+{% extends '_layouts/base_sistema.html' %}
+
+{% block head %}
+<title>Emprestimo Livro</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_emprestimo_livro.css') }}">
+{% endblock %}
+
+{% block conteudo_main %}]
+<!-- modal do boostrap -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmação Empréstimo!</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Deseja confirmar o empréstimo do livro: <strong>{{ livro['titulo'].title() }} </strong> por um período de <strong>15 dias</strong>? 
+                <hr>
+                <p>Biblioteca UFAL campus Arapiraca Sede</p> <!--futuramente dava para inserir em qual biblioteca dava para obter e a respectiva quantidade na devida biblioteca-->
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i> Cancelar</button>
+                <form method="post">
+                    <button type="submit" class="btn btn-primary botao"><i class="bi bi-book"></i> Realizar Empréstimo</button>
+                </form> <!--aqui será o real botão de confirmação-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; justify-content: space-between; text-align: center;">
+    <h4 class="fs-7">Emprestimo Livro: <strong>{{ livro['titulo'] }}</strong></h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('acervo') }}">Voltar</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a
+                    href="{{ url_for('emprestimos') }}">Emprestimos</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Emprestimo Livro</li>
+        </ol>
+    </nav>
+</div>
+<hr>
+<section>
+    <div>
+        <div class="card">
+            <div class="card-header">
+                Capa Livro
+            </div>
+            <div class="card-body campo-imagem">
+                <img src="{{ url_for('static', filename='img/capa_livros/' + livro['capa']) }}"
+                    alt="Capa livro {{ livro['capa'] }}">
+            </div>
+        </div>
+    </div>
+    <div class="caracteristica-livro">
+        <p class="badge-principal">Características Livro</p>
+        <div>
+            <div>
+                <label for="titulo" class="form-label">Nome: </label>
+                <input class="form-control" type="text" value="{{ livro['titulo'].title() }}" id="titulo"
+                    aria-label="Disabled input example" disabled readonly>
+            </div>
+
+            <div>
+                <label for="autor" class="form-label">Autor: </label>
+                <input class="form-control" type="text" value="{{ livro['autor'].title() }}" id="autor"
+                    aria-label="Disabled input example" disabled readonly>
+            </div>
+
+            <div>
+                <label for="area" class="form-label">Área do Conhecimento: </label>
+                <input class="form-control" type="text" value="{{ livro['area_conhecimento'].title() }}" id="area"
+                    aria-label="Disabled input example" disabled readonly>
+            </div>
+
+            <div>
+                <label for="bibliotecas" class="form-label">Presente nas Bibliotecas: </label>
+                <input class="form-control" type="text" value="{{ livro['biblioteca'] }}" id="bibliotecas"
+                    aria-label="Disabled input example" disabled readonly>
+            </div>
+
+            <div>
+                <label for="quantidade" class="form-label">Quantidade restante: </label>
+                <input class="form-control" type="text" value="{{ livro['quantidade'] }}" id="quantidade"
+                    aria-label="Disabled input example" disabled readonly>
+            </div>
+            <div>
+                <h5 style="text-align: center;">Você pode obter esse livro! <i class="bi bi-check-square-fill"
+                        style="color: rgb(12, 201, 53);"></i></h5>
+            </div>
+        </div>
+
+        <div class="campo-botao">
+            <button type="button" class="btn btn-primary botao" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Obter Livro
+            </button>
+        </div>
+
+    </div>
+</section>
+{% endblock %}

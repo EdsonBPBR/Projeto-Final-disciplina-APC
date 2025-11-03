@@ -49,6 +49,10 @@ hr {
     margin-top: 0;
 }
 
+footer {
+    margin-top: 20px;
+}
+
 footer > div {
     background-color: var(--cor-primaria);
     padding: 10px;
