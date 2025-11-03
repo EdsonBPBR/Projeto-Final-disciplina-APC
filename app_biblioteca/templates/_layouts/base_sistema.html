@@ -10,14 +10,15 @@
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!-- estilo base para a maioria das paginas -->
-    <link rel="stylesheet" href="../.././static/css/style_base.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_base.css') }}">
 </head>
 
 <body>
     <header>
         <nav class="navbar navbar-expand-lg bg-body-tertiary shadow bg-body-tertiary navbar-principal" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url_for('inicio') }}"><img src="../../static/img/imagem_livro.png" width="auto" height="30px" alt="Imagem livros empilhados">  BIBLIOTECA VIRTUAL</a>
+                <a class="navbar-brand" href="{{ url_for('inicio') }}"><img src="{{ url_for('static', filename='img/imagem_livro.png') }}" width="auto" height="30px" alt="Imagem livros empilhados">  BIBLIOTECA VIRTUAL</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -29,7 +30,7 @@
                             <a class="nav-link active" aria-current="page" href="{{ url_for('acervo') }}">Acervo Digital</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Empréstimos</a>
+                            <a class="nav-link" href="{{ url_for('emprestimos') }}">Empréstimos</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Notificações</a>
@@ -57,7 +58,7 @@
     </main>
     <footer>
         <div>
-            <img src="../../static/img/logo_ufal_braca.webp" alt="Logo ufal">
+            <img src="{{ url_for('static', filename='img/logo_ufal_braca.webp') }}" alt="Logo ufal">
             <p>2025 - 2029 © <strong>Edson, Jackeline, Augusto </strong></p>
         </div>
     </footer>

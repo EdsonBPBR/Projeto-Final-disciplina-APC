@@ -1,94 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Empréstimos</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-image: url("astronauta.png");
-            background-size: cover;
-            background-position: center;
-            color: #333;
-        }
+{% extends '_layouts/base_sistema.html' %}
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            width: 80%;
-            margin: 50px auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+{% block head %}
+<title>Emprestimos</title>
+{% endblock %}
 
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #1e90ff;
-        }
+{% block conteudo_main %}
+<!-- sistema de mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
-        h2 {
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-
-        input {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 80%;
-            max-width: 400px;
-            font-size: 1em;
-        }
-
-        input[type="date"] {
-            width: auto;
-        }
-
-        button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #1e90ff;
-            color: white;
-            font-size: 1em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #1c86ee;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Empréstimos</h1>
-        <h2>Nome Completo:</h2>
-        <input type="text" placeholder="Digite seu nome completo">
-        <h2>Endereço:</h2>
-        <input type="text" placeholder="Digite seu endereço">
-        <h2>Número:</h2>
-        <input type="number" placeholder="Digite o número">
-        <h2>Telefone:</h2>
-        <input type="text" placeholder="Digite seu telefone">
-        <h2>Nome do Livro:</h2>
-        <input type="text" placeholder="Digite o nome do livro">
-        <h2>Data de Empréstimo:</h2>
-        <input type="date">
-        <h2>Data de Devolução:</h2>
-        <input type="date">
-        <br>
-        <button>Enviar</button>
+<div style="display: flex; justify-content: space-between; text-align: center;">
+    <h4 class="fs-7">Histórico Livros Emprestados</h4>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('acervo') }}">Voltar</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Histórico Livros Emprestados</li>
+        </ol>
+    </nav>
+</div>
+<hr>
+<section class="titulos">
+    <div>
+        <table class="table table-hover shadow p-3 mb-5 bg-body-tertiary rounded" style="text-align: center;">
+            <thead>
+                <tr class="table-light">
+                    <th scope="col">Título</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Data Empréstimo</th>
+                    <th scope="col">Data Devolução</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livro_emprestado in info_livros_emprestados %}
+                <tr>
+                    <th scope="row">{{ livro_emprestado[0] }}</th>
+                    <td>{{ livro_emprestado[1] }}</td>
+                    <td>{{ livro_emprestado[2] }}</td>
+                    <td>{{ livro_emprestado[3] }}</td>
+                    <td>Entregue <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+</section>
 
-    <footer style="background-color: #964B00; color: #ffffff; text-align: center; padding: 20px; margin-top: 20px;">
-        <p style="margin: 5px 0;">&copy; 2025 Biblioteca Virtual. Todos os direitos reservados.</p>
-        <p style="margin: 5px 0;">Desenvolvido por Conexão DEV</p>
-    </footer>
-</body>
-</html>
+
+{% endblock %}

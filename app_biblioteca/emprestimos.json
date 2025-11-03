@@ -1,0 +1,20 @@
+[
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "5",
+        "titulo": "Apropriacao Cultural",
+        "autor": "Rodney Willyan",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    }
+]

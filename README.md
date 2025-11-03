@@ -14,7 +14,7 @@ O presente projeto é um sistema desevolvido em Python utilizando o Framework Fl
 3. JSON
 
 #### Requisitos
-Crie dois arquivos .json `livros.json` e 'registros.json' em `app_biblioteca/`
+Por motivos educacionais, não utilizamos um SGBD para incluir o conteúdo de arquivos. Sendo assim é necessário criar três arquivos .json que serão as bases de dados utilizados pelo sistema `livros.json` e 'registros.json' em `app_biblioteca/`
 
 ```
 import json
@@ -27,9 +27,16 @@ with open('app_biblioteca/livros.json','r') as arquivo
     json.dump([], arquivo)
 ```
 
+```
+with open('app_biblioteca/livros.json','r') as arquivo
+    json.dump([], arquivo)
+```
+
 ---
 UNIVERSIDADE FEDERAL DE ALAGOAS
 
 EDSON BARROS PONCIÚNCULA
-JACKELINE 
+
+JACKELINE OLIVEIRA DA SILVA
+
 AUGUSTO CÉSAR DE JESUS
