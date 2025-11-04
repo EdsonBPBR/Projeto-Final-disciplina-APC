@@ -8,7 +8,7 @@
 
 {% block conteudo_main %}
 <div style="display: flex; justify-content: space-between; text-align: center;">
-    <h4 class="fs-7">Olá, {{usuario['nome_completo']}}👋</h4>
+    <h4 class="fs-7">Olá, {{ nome_usuario }} 👋</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('inicio') }}">Inicio</a></li>
@@ -25,24 +25,32 @@
 <section class="titulos">
     <div>
         <table class="table table-hover caption-top shadow p-3 mb-5 bg-body-tertiary rounded" style="text-align: center;">
-            <caption><strong>n</strong> livros emprestrados em aberto</caption>
+            <caption><strong>{{ n_livros_emprestados }}</strong> livros emprestrados em aberto</caption>
             <thead>
                 <tr class="table-light">
                     <th scope="col">Título</th>
-                    <th scope="col">Unidade de Informação</th>
-                    <th scope="col">Data Aquisição</th>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Data Empresimo</th>
                     <th scope="col">Data Devolução</th>
                     <th scope="col">Status</th>
                 </tr>
             </thead>
             <tbody>
+                {% for livro_emprestado in livros_emprestados %}
                 <tr>
-                    <th scope="row">Redes de Computadores Tannabaum</th>
-                    <td>UFAL Arapira Sede</td>
-                    <td>21/10/2025</td>
-                    <td>31/10/2025</td>
-                    <td><i class="bi bi-check-circle-fill" style="color: darkgreen;"></i></td>
+                    <th scope="row">{{ livro_emprestado['titulo'] }}</th>
+                    <td>{{ livro_emprestado['autor'] }}</td>
+                    <td>{{ livro_emprestado['data_emprestimo'] }}</td>
+                    <td>{{ livro_emprestado['data_devolucao'] }}</td>
+                    <td>{{ livro_emprestado['status'].title() }} 
+                        {% if livro_emprestado['status'] == 'aberto' %}
+                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        {% else %}
+                        <i class="bi bi-alarm-fill" style="color: rgb(214, 4, 4);"></i>
+                        {% endif %}
+                    </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

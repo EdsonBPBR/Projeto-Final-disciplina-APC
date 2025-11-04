@@ -86,9 +86,19 @@ def inicio():
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login'))
 
-    usuario = session['usuario'] 
-    return render_template('inicio.html', usuario=usuario)
-    # ainda falta desenvolver futuramente aqui
+    dados_emprestimos = extrairDados('emprestimos')
+    livros_emprestados = []
+    
+    for emprestimo in dados_emprestimos:
+        if session['usuario']['matricula'] == emprestimo['matricula_usuario'] and emprestimo['status'] == 'aberto':
+            livros_emprestados.append(emprestimo)
+        
+    n_livros_emprestados = len(livros_emprestados)
+
+    return render_template('inicio.html', nome_usuario=session['usuario']['nome_completo'],
+                                        n_livros_emprestados=n_livros_emprestados,
+                                        livros_emprestados=livros_emprestados)
+    # quando chegar antes de fazer o deploy pro GitHub, realzar uma série de testes pra verificar se tá tudo ok
 
 @app.route('/biblioteca/acervo_digital')
 def acervo():
@@ -162,6 +172,7 @@ def emprestimo_livro(id):
         data_devolucao = data_emprestimo + timedelta(days=15)
         dados_livros = extrairDados('emprestimos')
         
+        # estava pensanddo em inserir 3 estágios do livro: "em aberto" (o aluno está com ele), "pendente" (passou da data de entrega e irá começar a acumular multas) e "entregue" (qiando o usuário já tiver entregue o livro)
         livro_emprestado = {
             'matricula_usuario': session['usuario']['matricula'],
             'email_usuario': session['usuario']['email'],
@@ -169,7 +180,8 @@ def emprestimo_livro(id):
             'titulo': info_livro['titulo'],
             'autor': info_livro['autor'],
             'data_emprestimo': data_emprestimo.strftime('%d/%m/%Y'),
-            'data_devolucao': data_devolucao.strftime('%d/%m/%Y')
+            'data_devolucao': data_devolucao.strftime('%d/%m/%Y'),
+            'status': 'aberto' # por padrão, o status vai 'aberto',
         }
         
         dados_livros.append(livro_emprestado) 
@@ -187,12 +199,23 @@ def emprestimos():
     
     # print(session['usuario']['matricula'])
     livros_emprestados = [] # resolvemos adicionar os livros no dicionario, pois cada livro emprestado é único, não existirá a repetição de outro mesmo livro
+    # percorrer os livros e se a data de hoje for igual a data de devolução, atualizar o status para 'pendente'
+    data_emprestimo = date.today()
+    dados_atualizados = False 
     
     dados_livros = extrairDados('emprestimos')
     for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
         if session['usuario']['matricula'] == registro['matricula_usuario']:
-            livros_emprestados.append((registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao']))
-    
+            livros_emprestados.append([registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao'], registro['status']])
+        
+        if data_emprestimo.strftime('%d/%m/%Y') == registro['data_devolucao'] and  registro['status'] != 'entregue' :
+            registro['status'] = 'pendente'  # atualizar o status
+            dados_atualizados = True
+            
+    if dados_atualizados:
+        salvarDados(dados_livros, 'emprestimos')
+
+    # percorrer os livros e se a data de hoje for igual a data de devolução, atualizar o status para 'pendente'
     if len(livros_emprestados) >= 4:
         flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
     
