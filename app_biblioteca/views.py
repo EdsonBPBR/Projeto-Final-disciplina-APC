@@ -115,6 +115,15 @@ def emprestimo_livro(id):
         'biblioteca': livro['biblioteca']
     }
     
+    # EU PARTICULAMENTE ENTENDI O ERRO DE ONTEM, ERA NO STATUS. ELE APARENTEMENTE NÃO ESTAVA SALVANDO ESSA CAMPO NO JS, AÍ O PYTHON TENTAVA ACESSAR E DAVA ERRO.
+    # MESMO ASSIM DEIXO PARA FAZER AMANHÃ:
+    # * INSERIR NOVAMENTE A TELA DE FUNDO DO LOGIN
+    # * NA TELA DE EMPRESTIMOS, EXIBIR UM ALERT CASO O NÚMERO DE LIVROS FOR IGUAL OU MAIOR A 4
+    # * RELACIONAR N LIVROS EMPRESTADOS DO USUÁRIO, SE FOR MAIOR OU IGUAL A 4 ALTERAR MENSAGEM E DESABILITAR BOTÃO PARA EMPRÉSTIMO
+    # E CREIO QUE É ISSO
+    # * CRIAR A PÁGINA DE EDICAÇÃO DE PERFIL
+    # * E ALGO AINDA SOBRE MATRIZES
+    
     # implementar o requisito: se o usuário já possui mais de 3 livros cadastrados, a mensagem: 'Você pode obter esse livro! ' tem que alterar conforme o problema do usuário e desativar o botão: 'obter livro'
     
     if request.method == 'POST':
