@@ -46,7 +46,16 @@
                     <td>{{ livro_emprestado[1] }}</td>
                     <td>{{ livro_emprestado[2] }}</td>
                     <td>{{ livro_emprestado[3] }}</td>
-                    <td>Entregue <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i></td>
+                    <td>{{ livro_emprestado[4].title() }} 
+
+                        {% if livro_emprestado[4] == 'aberto'  %}
+                        <i class="bi bi-book-fill" style="color: rgb(9, 196, 221);"></i>
+                        {% elif livro_emprestado[4]  == 'entregue' %}
+                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        {% else %}
+                        <i class="bi bi-alarm-fill" style="color: rgb(214, 4, 4);"></i>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
