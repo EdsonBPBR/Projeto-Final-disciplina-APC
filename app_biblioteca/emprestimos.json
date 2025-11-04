@@ -142,5 +142,77 @@
         "autor": "KAI-FU LEE",
         "data_emprestimo": "03/11/2025",
         "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20253655",
+        "email_usuario": "jackeline@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20253655",
+        "email_usuario": "jackeline@arapiraca.ufal.br",
+        "cod_livro": "2",
+        "titulo": "Sistemas Operacionais Modernos",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253655",
+        "email_usuario": "jackeline@arapiraca.ufal.br",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253655",
+        "email_usuario": "jackeline@arapiraca.ufal.br",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253666",
+        "email_usuario": "daniel@ufal.br",
+        "cod_livro": "7",
+        "titulo": "Aprendendo Inteligencia",
+        "autor": "Pierre",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253666",
+        "email_usuario": "daniel@ufal.br",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253666",
+        "email_usuario": "daniel@ufal.br",
+        "cod_livro": "4",
+        "titulo": "Python para Analise de Dados",
+        "autor": "Wes McKinnyr",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
+    },
+    {
+        "matricula_usuario": "20253666",
+        "email_usuario": "daniel@ufal.br",
+        "cod_livro": "4",
+        "titulo": "Python para Analise de Dados",
+        "autor": "Wes McKinnyr",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025"
     }
 ]

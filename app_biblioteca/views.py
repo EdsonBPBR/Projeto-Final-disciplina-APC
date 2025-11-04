@@ -95,10 +95,22 @@ def emprestimo_livro(id):
         return redirect(url_for('login'))
     
     dados = extrairDados('livros')
+    dados_emprestimos = extrairDados('emprestimos')
+    
     for registro in dados:
         if registro['cod'] == id:
             livro = registro
             break   
+    
+    # contar o número de livros que o usuário já pegou emprestado
+    n_livros_emprestados = 0
+    permissao_emprestimo = True
+    for emprestimo in dados_emprestimos:
+        if session['usuario']['matricula'] == emprestimo['matricula_usuario']:
+           n_livros_emprestados += 1
+    
+    if n_livros_emprestados > 3:
+        permissao_emprestimo = False
     
     if livro['quantidade'] < 2: # basicamente, se a quantidade for menor que 2, atualizar o status pra esgotado e salvar na base de dados. Ficar atento aqui, na ultima vez o erro foi aqui
         livro['status'] = 'esgotado'
@@ -115,12 +127,12 @@ def emprestimo_livro(id):
         'autor': livro['autor'],
         'area_conhecimento': livro['area_conhecimento'],
         'status': livro['status'],
-        'biblioteca': livro['biblioteca']
+        'biblioteca': livro['biblioteca'],
+        'permissao_emprestimo': not(permissao_emprestimo)
     }
     
     # EU PARTICULAMENTE ENTENDI O ERRO DE ONTEM, ERA NO STATUS. ELE APARENTEMENTE NÃO ESTAVA SALVANDO ESSA CAMPO NO JS, AÍ O PYTHON TENTAVA ACESSAR E DAVA ERRO.
     # MESMO ASSIM DEIXO PARA FAZER AMANHÃ:
-    # * NA TELA DE EMPRESTIMOS, EXIBIR UM ALERT CASO O NÚMERO DE LIVROS FOR IGUAL OU MAIOR A 4
     # * RELACIONAR N LIVROS EMPRESTADOS DO USUÁRIO, SE FOR MAIOR OU IGUAL A 4 ALTERAR MENSAGEM E DESABILITAR BOTÃO PARA EMPRÉSTIMO
     # E CREIO QUE É ISSO
     # * CRIAR A PÁGINA DE EDICAÇÃO DE PERFIL
