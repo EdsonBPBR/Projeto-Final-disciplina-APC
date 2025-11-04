@@ -101,14 +101,44 @@ def inicio():
     # quando chegar antes de fazer o deploy pro GitHub, realzar uma série de testes pra verificar se tá tudo ok
 
 @app.route('/biblioteca/acervo_digital')
-def acervo():
-    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
+@app.route('/biblioteca/acervo_digital/<int:pagina>')
+def acervo(pagina=1):
+    if verificaUsuarioLogado(session):
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login'))
     
     dados_livros = extrairDados('livros')
-    # print(dados_livros)
-    return render_template('acervo.html', dados_livros=dados_livros)
+    
+    # implemetei, pedi ajuda tbm ao chat, como implementar sistema depaginacao com base na matriz montada
+    matriz_livros_cadastrados = []
+    n_linhas = len(dados_livros) // 10
+    resto_livros = len(dados_livros) % 10
+    if resto_livros != 0:
+        n_linhas += 1
+    
+    for i in range(n_linhas):
+        inicio = i * 10
+        fim = inicio + 10
+        linha = dados_livros[inicio:fim]
+        matriz_livros_cadastrados.append(linha)
+    
+    # PAGINAÇÃO: 1 linha da matriz por página (10 livros)
+    total_paginas = n_linhas  # Cada página é uma linha da matriz
+    
+    # Ajustar página
+    if pagina < 1:
+        pagina = 1
+    elif pagina > total_paginas:
+        pagina = total_paginas
+    
+    # Pegar APENAS UMA LINHA da matriz para esta página
+    matriz_pagina = [matriz_livros_cadastrados[pagina - 1]]  # Apenas a linha da página atual
+    
+    return render_template('acervo.html',
+                         matriz_livros=matriz_pagina,
+                         pagina_atual=pagina,
+                         total_paginas=total_paginas,
+                         total_livros=len(dados_livros))
 
 @app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
 def emprestimo_livro(id): 

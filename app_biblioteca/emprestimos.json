@@ -26,7 +26,57 @@
         "titulo": "Redes de Computadores",
         "autor": "Tennabaum",
         "data_emprestimo": "04/11/2025",
-        "data_devolucao": "05/11/2025",
+        "data_devolucao": "04/11/2025",
+        "status": "pendente"
+    },
+    {
+        "matricula_usuario": "20253666",
+        "email_usuario": "daniel@ufal.br",
+        "cod_livro": "13",
+        "titulo": "Os Sertoes",
+        "autor": "Euclides da Cunha",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "11",
+        "titulo": "Joao Guimaraes Rosa",
+        "autor": "Veredas",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "20260103",
+        "email_usuario": "augusto@ufal.br",
+        "cod_livro": "4",
+        "titulo": "Python para Analise de Dados",
+        "autor": "Wes McKinnyr",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "20260103",
+        "email_usuario": "augusto@ufal.br",
+        "cod_livro": "14",
+        "titulo": "Vidas Secas",
+        "autor": "Graciliano Ramos",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "20260103",
+        "email_usuario": "augusto@ufal.br",
+        "cod_livro": "4",
+        "titulo": "Python para Analise de Dados",
+        "autor": "Wes McKinnyr",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
         "status": "aberto"
     }
 ]
