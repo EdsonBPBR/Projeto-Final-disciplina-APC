@@ -25,6 +25,18 @@ def cadastro():
             return redirect(url_for('cadastro'))
         
         dados_usuarios = extrairDados('registros')
+        
+        def verificar_matricula_existente(usuarios, matricula_alvo, index=0): # funcao recursiva que verifica se a matricual oinformada pelo usuario no ato do cadastro ja existe
+            if index >= len(usuarios):
+                return False 
+            if usuarios[index]['matricula'] == matricula_alvo:
+                return True  
+            return verificar_matricula_existente(usuarios, matricula_alvo, index + 1)
+        
+        if verificar_matricula_existente(dados_usuarios, matricula):
+            flash('Matrícula ja cadastrada no sistema!', 'warning')
+            return redirect(url_for('cadastro'))
+        
         dados_usuarios.append({
             "matricula":matricula,
             "nome_completo":nome_completo,
