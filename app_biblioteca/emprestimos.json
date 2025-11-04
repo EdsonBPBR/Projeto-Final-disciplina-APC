@@ -16,5 +16,131 @@
         "autor": "Rodney Willyan",
         "data_emprestimo": "03/11/2025",
         "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "7",
+        "titulo": "Aprendendo Inteligencia",
+        "autor": "Pierre",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "2",
+        "titulo": "Sistemas Operacionais Modernos",
+        "autor": "Tennabaum",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "20260102",
+        "email_usuario": "barbosa@arapiraca.ufal.br",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "8",
+        "titulo": "Inteligencia Artificiais",
+        "autor": "KAI-FU LEE",
+        "data_emprestimo": "03/11/2025",
+        "data_devolucao": "18/11/2025"
     }
 ]
