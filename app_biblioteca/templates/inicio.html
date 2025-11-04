@@ -20,7 +20,7 @@
 
 <!-- status dos titulos -->
 <div>
-    <p class="badge-principal">Titulos Emprestados</p>
+    <p class="badge-principal">Titulos Em Aberto</p>
 </div>
 <section class="titulos">
     <div>
@@ -44,7 +44,7 @@
                     <td>{{ livro_emprestado['data_devolucao'] }}</td>
                     <td>{{ livro_emprestado['status'].title() }} 
                         {% if livro_emprestado['status'] == 'aberto' %}
-                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        <i class="bi bi-book-fill" style="color: rgb(9, 196, 221);"></i>
                         {% else %}
                         <i class="bi bi-alarm-fill" style="color: rgb(214, 4, 4);"></i>
                         {% endif %}

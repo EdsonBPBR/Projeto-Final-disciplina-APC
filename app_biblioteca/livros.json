@@ -1,0 +1,132 @@
+[
+    {
+        "cod": "1",
+        "capa": "../static/img/capa_livros/capa1.webp",
+        "titulo": "Redes de Computadores",
+        "quantidade": 6,
+        "autor": "Tennabaum",
+        "area_conhecimento": "Informatica e Comunicacao",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL A C Simoes, biblioteca UFAL Arapiraca"
+    },
+    {
+        "cod": "2",
+        "capa": "../static/img/capa_livros/capa2.webp",
+        "titulo": "Sistemas Operacionais Modernos",
+        "quantidade": 2,
+        "autor": "Tennabaum",
+        "area_conhecimento": "Informatica e Comunicacao",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL A C Simoes"
+    },
+    {
+        "cod": "4",
+        "capa": "../static/img/capa_livros/capa4.webp",
+        "titulo": "Python para Analise de Dados",
+        "quantidade": 0,
+        "autor": "Wes McKinnyr",
+        "area_conhecimento": "Informatica e Comunicacao",
+        "status": "esgotado",
+        "biblioteca": "Biblioteca UFAL A C Simoes, biblioteca UFAL Arapiraca"
+    },
+    {
+        "cod": "5",
+        "capa": "../static/img/capa_livros/capa5.webp",
+        "titulo": "Apropriacao Cultural",
+        "quantidade": 35,
+        "autor": "Rodney Willyan",
+        "area_conhecimento": "Ciencias Sociais e Humanas",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca"
+    },
+    {
+        "cod": "6",
+        "capa": "../static/img/capa_livros/capa6.webp",
+        "titulo": "Cultura: conceito antropologico",
+        "quantidade": 13,
+        "autor": "Roque de Laraia",
+        "area_conhecimento": "Humanidades e Sociedade",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca"
+    },
+    {
+        "cod": "7",
+        "capa": "../static/img/capa_livros/capa7.webp",
+        "titulo": "Aprendendo Inteligencia",
+        "quantidade": 11,
+        "autor": "Pierre",
+        "area_conhecimento": "Conhecimentos e tecnicas",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL A C Simoes, biblioteca UFAL Arapiraca"
+    },
+    {
+        "cod": "8",
+        "capa": "../static/img/capa_livros/capa8.webp",
+        "titulo": "Inteligencia Artificiais",
+        "quantidade": 3,
+        "autor": "KAI-FU LEE",
+        "area_conhecimento": "Conhecimentos e tecnicas",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL A C Simoes"
+    },
+    {
+        "cod": "9",
+        "capa": "../static/img/capa_livros/capa9.webp",
+        "titulo": "O homem que Calculava",
+        "quantidade": 20,
+        "autor": "Malba Tahan",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    },
+    {
+        "cod": "10",
+        "capa": "../static/img/capa_livros/capa10.webp",
+        "titulo": "O Codigo da Vinci",
+        "quantidade": 20,
+        "autor": "Dan Brown",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    },
+    {
+        "cod": "11",
+        "capa": "../static/img/capa_livros/capa11.webp",
+        "titulo": "Joao Guimaraes Rosa",
+        "quantidade": 8,
+        "autor": "Veredas",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    },
+    {
+        "cod": "12",
+        "capa": "../static/img/capa_livros/capa12.webp",
+        "titulo": "Morte e Vida Severina",
+        "quantidade": 35,
+        "autor": "Joao Cabral",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    },
+    {
+        "cod": "13",
+        "capa": "../static/img/capa_livros/capa13.webp",
+        "titulo": "Os Sertoes",
+        "quantidade": 34,
+        "autor": "Euclides da Cunha",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    },
+    {
+        "cod": "14",
+        "capa": "../static/img/capa_livros/capa14.webp",
+        "titulo": "Vidas Secas",
+        "quantidade": 4,
+        "autor": "Graciliano Ramos",
+        "area_conhecimento": "Humanidades",
+        "status": "disponivel",
+        "biblioteca": "Biblioteca UFAL Arapiraca Sede"
+    }
+]
