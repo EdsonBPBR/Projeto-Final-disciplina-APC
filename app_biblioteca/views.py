@@ -87,22 +87,18 @@ def inicio():
         return redirect(url_for('login'))
 
     dados_emprestimos = extrairDados('emprestimos')
+    livros_emprestados = []
     
-    n_livros_emprestados = 0
     for emprestimo in dados_emprestimos:
-        if session['usuario']['matricula'] == emprestimo['matricula_usuario']:
-           n_livros_emprestados += 1
-           print(emprestimo)
+        if session['usuario']['matricula'] == emprestimo['matricula_usuario'] and emprestimo['status'] == 'aberto':
+            livros_emprestados.append(emprestimo)
         
-           
-    livros_emprestados = [] # resolvemos adicionar os livros no dicionario, pois cada livro emprestado é único, não existirá a repetição de outro mesmo livro
-    
-    
-    
-    info_painel_inicial = [session['usuario']['nome_completo'], n_livros_emprestados]
+    n_livros_emprestados = len(livros_emprestados)
 
-    return render_template('inicio.html', info_painel_inicial=info_painel_inicial)
-    # ainda falta desenvolver futuramente aqui
+    return render_template('inicio.html', nome_usuario=session['usuario']['nome_completo'],
+                                        n_livros_emprestados=n_livros_emprestados,
+                                        livros_emprestados=livros_emprestados)
+    # quando chegar antes de fazer o deploy pro GitHub, realzar uma série de testes pra verificar se tá tudo ok
 
 @app.route('/biblioteca/acervo_digital')
 def acervo():
