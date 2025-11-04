@@ -2,7 +2,7 @@
 
 {% block head %}
 <title>Acervo Digital</title>
-<link rel="stylesheet" href="../static/css/style_acervo.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_acervo.css') }}">
 {% endblock %}
 
 {% block conteudo_main %}
@@ -46,7 +46,7 @@
                 {% for livro in linha %}
                 <tr>
                     <th scope="row">{{ livro['cod'] }}</th>
-                    <td><img src="{{ livro['capa'] }}" width="auto" height="40px" alt="Capa livro"></td>
+                    <td><img src="{{ livro['capa'] }}" width="auto" height="40px" alt="Capa livro"></td> <!--correção: depois alterar para acessar utilizando os arquivos estáticos, pois com o sistema de paginação ele não acessa mais diretamente no diretório nativo, removendo assim quando muda a sessão-->
                     <td>{{ livro['titulo'] }}</td>
                     <td>{{ livro['autor'] }}</td>
                     <td>{{ livro['area_conhecimento'] }}</td>

@@ -1,0 +1,112 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url("../img/imagem_ufal.webp");
+    background-size: cover;
+    background-position: center;    
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-attachment: fixed;
+    position: relative;
+}
+
+
+:root {
+    --cor-primaria: #964B00;
+    --cor-secundaria: #ffff
+}
+
+header {
+    margin-bottom: 1rem
+}
+
+.navbar-principal {
+    background-color: var(--cor-primaria) !important;
+}
+
+.navbar-principal div>a {
+    color: var(--cor-secundaria) !important;
+    font-weight: 600;
+}
+
+.navbar-principal div {
+    width: 97%;
+    margin: auto;
+}
+
+.navbar-principal ul>li>a {
+    color: var(--cor-secundaria) !important;
+}
+
+.perfil-usuario {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+main {
+    width: 95%;
+    margin: auto;
+}
+
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh; 
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1rem;
+}
+
+.login > div > div {
+    display: flex;
+    justify-content: center;
+
+    img {
+    height: 70px;
+    width: auto;
+    align-items: center;
+    }
+}
+
+.login > div {
+    background-color: var(--cor-secundaria);
+    width: 100%;
+    max-width: 480px; 
+    padding: 2rem;
+    border-radius: 6px;
+}
+
+.campo-botao {
+    display: flex;
+    justify-content: center;
+}
+
+.campo-botao > button {
+    background-color: var(--cor-primaria) !important;
+    border: none;
+}
+
+.campo-botao > button:hover {
+    background-color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+.campo-links {
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.campo-links > a {
+    color: var(--cor-primaria);
+}
+
+.campo-links > a:hover {
+    font-weight: 600;
+}

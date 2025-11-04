@@ -42,11 +42,11 @@ def cadastro():
             "nome_completo":nome_completo,
             "email":email,
             "senha":senha}) # dava para usar o hash na senha, furutramente implementar isso para não salvar a senha de forma crua
+        
         salvarDados(dados_usuarios, 'registros')
         flash('Cadastro criado com sucesso! Faça o login!', 'success')
         return redirect(url_for('cadastro'))
         
-        # inserir sistema para percorrer os dados já cadastrados para verificar se ja existe uma matricula cdastrada
     return render_template('cadastro.html')
 
 @app.route('/login', methods = ['GET', 'POST'])
@@ -54,7 +54,6 @@ def login():
     if request.method == 'POST':
         matricula = request.form.get('matricula')
         senha = request.form.get('senha')
-        print(matricula, senha)
         
         # verificar se os dados informados estao cadastrados no aquivo json
         dados_usuarios = extrairDados('registros')
@@ -80,6 +79,28 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/recuperar_senha', methods=['GET', 'POST'])
+def recuperar_senha():
+    # ainda falta desenvolver, percorrer a matricula informada. Verificar se a matricula informada já está cadastrada
+    if request.method == 'POST':
+        matricula = request.form.get('matricula')
+
+        dados_registros = extrairDados('registros')
+        registro_cadastrado = False
+        
+        for registro in dados_registros:
+            if registro['matricula'] == matricula:
+                registro_cadastrado = True
+                email = registro['email']
+        
+        if registro_cadastrado:
+            flash(f'E-mail enviado para: {email}! Verifique também sua caixa de spam', 'success')
+            return redirect(url_for('recuperar_senha'))
+
+        flash('Matricula não encontrada', 'danger')
+        
+    return render_template('recuperar_senha.html')
+
 @app.route('/biblioteca')
 def inicio():
     if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
@@ -95,10 +116,7 @@ def inicio():
         
     n_livros_emprestados = len(livros_emprestados)
 
-    return render_template('inicio.html', nome_usuario=session['usuario']['nome_completo'],
-                                        n_livros_emprestados=n_livros_emprestados,
-                                        livros_emprestados=livros_emprestados)
-    # quando chegar antes de fazer o deploy pro GitHub, realzar uma série de testes pra verificar se tá tudo ok
+    return render_template('inicio.html', nome_usuario=session['usuario']['nome_completo'], n_livros_emprestados=n_livros_emprestados,livros_emprestados=livros_emprestados)
 
 @app.route('/biblioteca/acervo_digital')
 @app.route('/biblioteca/acervo_digital/<int:pagina>')
@@ -123,9 +141,8 @@ def acervo(pagina=1):
         matriz_livros_cadastrados.append(linha)
     
     # PAGINAÇÃO: 1 linha da matriz por página (10 livros)
-    total_paginas = n_linhas  # Cada página é uma linha da matriz
+    total_paginas = n_linhas  # cada página é uma linha da matriz
     
-    # Ajustar página
     if pagina < 1:
         pagina = 1
     elif pagina > total_paginas:
@@ -134,11 +151,7 @@ def acervo(pagina=1):
     # Pegar APENAS UMA LINHA da matriz para esta página
     matriz_pagina = [matriz_livros_cadastrados[pagina - 1]]  # Apenas a linha da página atual
     
-    return render_template('acervo.html',
-                         matriz_livros=matriz_pagina,
-                         pagina_atual=pagina,
-                         total_paginas=total_paginas,
-                         total_livros=len(dados_livros))
+    return render_template('acervo.html', matriz_livros=matriz_pagina, pagina_atual=pagina, total_paginas=total_paginas, total_livros=len(dados_livros))
 
 @app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
 def emprestimo_livro(id): 
@@ -182,13 +195,6 @@ def emprestimo_livro(id):
         'biblioteca': livro['biblioteca'],
         'permissao_emprestimo': not(permissao_emprestimo)
     }
-    
-    # EU PARTICULAMENTE ENTENDI O ERRO DE ONTEM, ERA NO STATUS. ELE APARENTEMENTE NÃO ESTAVA SALVANDO ESSA CAMPO NO JS, AÍ O PYTHON TENTAVA ACESSAR E DAVA ERRO.
-    # MESMO ASSIM DEIXO PARA FAZER AMANHÃ:
-    # * RELACIONAR N LIVROS EMPRESTADOS DO USUÁRIO, SE FOR MAIOR OU IGUAL A 4 ALTERAR MENSAGEM E DESABILITAR BOTÃO PARA EMPRÉSTIMO
-    # E CREIO QUE É ISSO
-    # * CRIAR A PÁGINA DE EDICAÇÃO DE PERFIL
-    # * E ALGO AINDA SOBRE MATRIZES
     
     # implementar o requisito: se o usuário já possui mais de 3 livros cadastrados, a mensagem: 'Você pode obter esse livro! ' tem que alterar conforme o problema do usuário e desativar o botão: 'obter livro'
     
@@ -254,6 +260,12 @@ def emprestimos():
 @app.route('/biblioteca/sobre')
 def sobre():
     return '<h1>Sobre o projeto da biblioteca online</h1>'
+
+@app.route('/biblioteca/perfil/<string:id>')
+def editar_perfil(id):
+    return render_template('editar_perfil.html', id=id)
+
+
 
 def verificaUsuarioLogado(session):
     logado = 'usuario' in session

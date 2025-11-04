@@ -1,8 +1,8 @@
 {% extends '_layouts/base_projeto.html' %}
 
 {% block head %}
-<title>Login</title>
-<link rel="stylesheet" href="../.././static/css/style_login.css">
+<title>Recuperar Senha</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style_recuperar_senha.css') }}">
 {% endblock %}
 
 {% block conteudo_main %}
@@ -11,23 +11,19 @@
         <div>
             <img src="../static/img/logo_ufal.webp" alt="Logo ufal">
         </div>
+        <h5 style="text-align: center;">Recuperar Senha</h5>
         <form method="POST">
             <div class="mb-3">
                 <label for="matricula" class="form-label">Matricula</label>
                 <input type="text" name="matricula" class="form-control" id="matricula"
                     aria-describedby="emailHelp" required>
-                <div id="emailHelp" class="form-text">Informe a matricula no ato do cadastro.</div>
-            </div>
-            <div class="mb-3">
-                <label for="senha" class="form-label">Senha</label>
-                <input type="password" name="senha" class="form-control" id="senha" required>
+                <div id="emailHelp" class="form-text">Redefinição da senha chegará no e-mail cadastrado</div>
             </div>
             <div class="campo-botao">
-                <button type="submit" class="btn btn-primary botao">Acessar</button>
+                <button type="submit" class="btn btn-primary botao">Enviar</button>
             </div>
             <div class="campo-links">
-                <a href="{{ url_for('cadastro') }}">Cadastre-se</a>
-                <a href="{{ url_for('recuperar_senha') }}">Recuperar Senha</a>
+                <a href="{{ url_for('login') }}">Login</a>
             </div>
         </form>
     </div>

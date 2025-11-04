@@ -78,5 +78,35 @@
         "data_emprestimo": "04/11/2025",
         "data_devolucao": "19/11/2025",
         "status": "aberto"
+    },
+    {
+        "matricula_usuario": "20260103",
+        "email_usuario": "augusto@ufal.br",
+        "cod_livro": "11",
+        "titulo": "Joao Guimaraes Rosa",
+        "autor": "Veredas",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "2025027536",
+        "email_usuario": "barrosedsonp@gmail.com",
+        "cod_livro": "1",
+        "titulo": "Redes de Computadores",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
+    },
+    {
+        "matricula_usuario": "20253655",
+        "email_usuario": "jackeline@arapiraca.ufal.br",
+        "cod_livro": "2",
+        "titulo": "Sistemas Operacionais Modernos",
+        "autor": "Tennabaum",
+        "data_emprestimo": "04/11/2025",
+        "data_devolucao": "19/11/2025",
+        "status": "aberto"
     }
 ]
