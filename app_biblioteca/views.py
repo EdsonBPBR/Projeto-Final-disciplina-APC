@@ -25,6 +25,18 @@ def cadastro():
             return redirect(url_for('cadastro'))
         
         dados_usuarios = extrairDados('registros')
+        
+        def verificar_matricula_existente(usuarios, matricula_alvo, index=0): # funcao recursiva que verifica se a matricual oinformada pelo usuario no ato do cadastro ja existe
+            if index >= len(usuarios):
+                return False 
+            if usuarios[index]['matricula'] == matricula_alvo:
+                return True  
+            return verificar_matricula_existente(usuarios, matricula_alvo, index + 1)
+        
+        if verificar_matricula_existente(dados_usuarios, matricula):
+            flash('Matrícula ja cadastrada no sistema!', 'warning')
+            return redirect(url_for('cadastro'))
+        
         dados_usuarios.append({
             "matricula":matricula,
             "nome_completo":nome_completo,
@@ -85,21 +97,36 @@ def acervo():
         return redirect(url_for('login'))
     
     dados_livros = extrairDados('livros')
-    print(dados_livros)
+    # print(dados_livros)
     return render_template('acervo.html', dados_livros=dados_livros)
 
 @app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
 def emprestimo_livro(id): 
-    
     if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
         flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
         return redirect(url_for('login'))
     
     dados = extrairDados('livros')
+    dados_emprestimos = extrairDados('emprestimos')
+    
     for registro in dados:
         if registro['cod'] == id:
             livro = registro
-            break
+            break   
+    
+    # contar o número de livros que o usuário já pegou emprestado
+    n_livros_emprestados = 0
+    permissao_emprestimo = True
+    for emprestimo in dados_emprestimos:
+        if session['usuario']['matricula'] == emprestimo['matricula_usuario']:
+           n_livros_emprestados += 1
+    
+    if n_livros_emprestados > 3:
+        permissao_emprestimo = False
+    
+    if livro['quantidade'] < 2: # basicamente, se a quantidade for menor que 2, atualizar o status pra esgotado e salvar na base de dados. Ficar atento aqui, na ultima vez o erro foi aqui
+        livro['status'] = 'esgotado'
+        salvarDados(dados, 'livros')
     
     caminho_capa = livro['capa']
     ultimo_nome = caminho_capa.split('/')[-1]
@@ -112,12 +139,23 @@ def emprestimo_livro(id):
         'autor': livro['autor'],
         'area_conhecimento': livro['area_conhecimento'],
         'status': livro['status'],
-        'biblioteca': livro['biblioteca']
+        'biblioteca': livro['biblioteca'],
+        'permissao_emprestimo': not(permissao_emprestimo)
     }
+    
+    # EU PARTICULAMENTE ENTENDI O ERRO DE ONTEM, ERA NO STATUS. ELE APARENTEMENTE NÃO ESTAVA SALVANDO ESSA CAMPO NO JS, AÍ O PYTHON TENTAVA ACESSAR E DAVA ERRO.
+    # MESMO ASSIM DEIXO PARA FAZER AMANHÃ:
+    # * RELACIONAR N LIVROS EMPRESTADOS DO USUÁRIO, SE FOR MAIOR OU IGUAL A 4 ALTERAR MENSAGEM E DESABILITAR BOTÃO PARA EMPRÉSTIMO
+    # E CREIO QUE É ISSO
+    # * CRIAR A PÁGINA DE EDICAÇÃO DE PERFIL
+    # * E ALGO AINDA SOBRE MATRIZES
     
     # implementar o requisito: se o usuário já possui mais de 3 livros cadastrados, a mensagem: 'Você pode obter esse livro! ' tem que alterar conforme o problema do usuário e desativar o botão: 'obter livro'
     
     if request.method == 'POST':
+        livro['quantidade'] = livro['quantidade'] - 1 # decrementa uma unidade a cada empréstimo realizado por usuários
+        salvarDados(dados, 'livros') # salvar essa alteração, prestar atenção senão vai fazer como na ultima vez kkk
+
         flash(f'Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a BIBLIOTECA UFAL ARAPIRACA SEDE para retirada', 'success')
 
         data_emprestimo = date.today()
@@ -134,11 +172,11 @@ def emprestimo_livro(id):
             'data_devolucao': data_devolucao.strftime('%d/%m/%Y')
         }
         
-        dados_livros.append(livro_emprestado)
-        print(dados_livros)
+        dados_livros.append(livro_emprestado) 
         salvarDados(dados_livros, 'emprestimos')
         # ainda inserir sistema para remover o 
         return redirect(url_for('emprestimos'))
+
     return render_template('emprestimo_livro.html', livro = info_livro)
 
 @app.route('/biblioteca/emprestimos')
@@ -154,6 +192,9 @@ def emprestimos():
     for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
         if session['usuario']['matricula'] == registro['matricula_usuario']:
             livros_emprestados.append((registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao']))
+    
+    if len(livros_emprestados) >= 4:
+        flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
     
     return render_template('emprestimos.html', info_livros_emprestados = livros_emprestados)
 

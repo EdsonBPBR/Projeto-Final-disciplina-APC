@@ -87,13 +87,18 @@
                     aria-label="Disabled input example" disabled readonly>
             </div>
             <div>
-                <h5 style="text-align: center;">Você pode obter esse livro! <i class="bi bi-check-square-fill"
-                        style="color: rgb(12, 201, 53);"></i></h5>
+                <h5 style="text-align: center;">
+                    {% if livro['permissao_emprestimo'] %}
+                    Limite de emprestimos excedidos! <i class="bi bi-x-circle-fill" style="color: rgb(201, 12, 12);"></i>
+                    {% else %}
+                    Você pode obter esse livro! <i class="bi bi-check-square-fill" style="color: rgb(12, 201, 53);"></i>
+                    {% endif %}
+                </h5>
             </div>
         </div>
 
         <div class="campo-botao">
-            <button type="button" class="btn btn-primary botao" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <button type="button" class="btn btn-primary botao" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if livro['permissao_emprestimo'] %} disabled {% endif %}>
                 Obter Livro
             </button>
         </div>

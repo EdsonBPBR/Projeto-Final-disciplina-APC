@@ -4,7 +4,13 @@
 }
 
 body {
-    background-color: rgb(240, 240, 240);
+    background-image: linear-gradient(rgba(255,255,255,0.75), rgba(255,255,255,0.75)), url("../img/imagem_ufal.webp");
+    background-size: cover;
+    background-position: center;    
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background-attachment: fixed;
+    position: relative;
 }
 
 :root {
