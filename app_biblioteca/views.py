@@ -169,6 +169,9 @@ def emprestimos():
         if session['usuario']['matricula'] == registro['matricula_usuario']:
             livros_emprestados.append((registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao']))
     
+    if len(livros_emprestados) >= 4:
+        flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
+    
     return render_template('emprestimos.html', info_livros_emprestados = livros_emprestados)
 
 @app.route('/biblioteca/sobre')
