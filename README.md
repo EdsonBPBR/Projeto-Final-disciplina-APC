@@ -14,7 +14,7 @@ O presente projeto é um sistema desevolvido em Python utilizando o Framework Fl
 3. JSON
 
 #### Requisitos e Informações Adicionais
-Por motivos educacionais, não utilizamos um SGBD para incluir o conteúdo de arquivos. Sendo assim, é necessário criar três arquivos .json que serão as bases de dados utilizados pelo sistema `livros.json` e `registros.json` em `app_biblioteca/`. 
+Por motivos educacionais, não utilizamos um SGBD para incluir o conteúdo de arquivos. Sendo assim, por padrão, o projeto vai com os arquivos criados já com alguns registros, principalmente dos livros, senão é necessário criar três arquivos .json que serão as bases de dados utilizados pelo sistema `livros.json` e `registros.json` em `app_biblioteca/`. 
 
 ```
 import json
