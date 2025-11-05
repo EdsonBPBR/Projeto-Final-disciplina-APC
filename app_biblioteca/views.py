@@ -202,7 +202,7 @@ def emprestimo_livro(id):
         livro['quantidade'] = livro['quantidade'] - 1 # decrementa uma unidade a cada empréstimo realizado por usuários
         salvarDados(dados, 'livros') # salvar essa alteração, prestar atenção senão vai fazer como na ultima vez kkk
 
-        flash(f'Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a BIBLIOTECA UFAL ARAPIRACA SEDE para retirada', 'success')
+        flash(f"Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a BIBLIOTECA UFAL ARAPIRACA SEDE para retirada", 'success')
 
         data_emprestimo = date.today()
         data_devolucao = data_emprestimo + timedelta(days=15)
