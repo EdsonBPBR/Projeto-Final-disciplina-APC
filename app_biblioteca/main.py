@@ -1,9 +1,13 @@
 from flask import Flask
+from dotenv import load_dotenv
+import os
  
 app = Flask(__name__,static_folder='static')
-app.secret_key = '123456'
+load_dotenv()
 
-from views import * # arquivo contem as rotas e tratamento das requisições
+app.secret_key = os.getenv('SECRET_KEY')
+
+from .views import *
 
 if __name__ == '__main__':
     app.run(debug=True) # type: ignore
