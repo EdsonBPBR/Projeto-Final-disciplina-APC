@@ -51,6 +51,10 @@ main {
     margin: auto;
 }
 
+button {
+    border: none !important;
+}
+
 .cadastro {
     display: flex;
     align-items: center;

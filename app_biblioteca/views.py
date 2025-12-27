@@ -1,82 +1,82 @@
-from main import app 
+from app_biblioteca.main import app
 from datetime import date, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, url_for, redirect, request, flash, session
-from models import extrairDados, salvarDados
+from models.operacoes_banco import extrairDados, salvarDados
+from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login
 
 @app.route('/')
 def raiz():
     return redirect(url_for('login'))
 
-@app.route('/cadastro', methods = ['GET', 'POST']) # trabalha com os metodos get - para obter a página sem informacoes e post para enviar os dados dor formsm
+@app.route('/cadastro', methods = ['GET', 'POST']) 
 def cadastro():
+    """
+    Cadastra o discente na base de dados
+    """
     if request.method == 'POST':
-        # obter os dadssos da interface web, se o método for post > enviar
         matricula = request.form.get('matricula')
         nome_completo = request.form.get('nome')
         email = request.form.get('email')
         senha = request.form.get('senha')
         confirmar_senha = request.form.get('confirmar_senha')
         
-        # implementar os tratamentos do tamanho e tipo da matricula
-        # tratamento para verificar se o email pertence a ufal
+        if validar_email(email):
+            flash('E-mail inválido! Informe um email institucional!', 'warning')
+            return redirect(url_for('cadastro'))
+        
+        if len(str(matricula)) != 10:
+            flash('Matricula inválida!', 'warning')
+            return redirect(url_for('cadastro'))
         
         if senha != confirmar_senha:
             flash('Senhas informadas não coincidem', 'warning')
             return redirect(url_for('cadastro'))
         
-        dados_usuarios = extrairDados('registros')
-        
-        def verificar_matricula_existente(usuarios, matricula_alvo, index=0): # funcao recursiva que verifica se a matricual oinformada pelo usuario no ato do cadastro ja existe
-            if index >= len(usuarios):
-                return False 
-            if usuarios[index]['matricula'] == matricula_alvo:
-                return True  
-            return verificar_matricula_existente(usuarios, matricula_alvo, index + 1)
-        
-        if verificar_matricula_existente(dados_usuarios, matricula):
-            flash('Matrícula ja cadastrada no sistema!', 'warning')
+        try:
+            dados_usuarios = extrairDados('registros')
+            if verificar_matricula_existente(dados_usuarios, matricula):
+                flash('Matrícula ja cadastrada no sistema!', 'warning')
+                return redirect(url_for('cadastro'))
+            
+            dados_usuarios.append({
+                "matricula":matricula,
+                "nome_completo":nome_completo,
+                "email":email,
+                "senha":generate_password_hash(str(senha))
+            })
+            
+            salvarDados(dados_usuarios, 'registros')
+            flash('Cadastro criado com sucesso! Faça o login!', 'success')
+            
+        except Exception as erro:
+            flash(f'Não foi possível cadastrar o discente: {erro}', 'warning')
             return redirect(url_for('cadastro'))
         
-        dados_usuarios.append({
-            "matricula":matricula,
-            "nome_completo":nome_completo,
-            "email":email,
-            "senha":senha}) # dava para usar o hash na senha, furutramente implementar isso para não salvar a senha de forma crua
-        
-        salvarDados(dados_usuarios, 'registros')
-        flash('Cadastro criado com sucesso! Faça o login!', 'success')
         return redirect(url_for('cadastro'))
-        
     return render_template('cadastro.html')
 
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
+    """
+    Realiza o login do discente redirecionando para o 'inicio', armazenando-o na sessão do navegador se a operação for sucedida 
+    """
     if request.method == 'POST':
         matricula = request.form.get('matricula')
         senha = request.form.get('senha')
-        
-        # verificar se os dados informados estao cadastrados no aquivo json
-        dados_usuarios = extrairDados('registros')
-        login_sucesso = False
-        for registro in dados_usuarios:
-            if registro['matricula'] == matricula and registro['senha'] == senha:
-                login_sucesso = True
-                usuario = registro
-                break
-        
+
+        login_sucesso, usuario = realiza_login(matricula, senha)
         if login_sucesso:
-            session['usuario'] = { # o flask, bem como no django, tem o módulo nativo session, que já faz esse tratamento com os cookies utilizados pelo navegador
-                'matricula': usuario['matricula'],
+            session['usuario'] = {
+                'matricula': usuario['matricula'], # está vermelho, pq estou retornando None se o login não tiver sucesso
                 'nome_completo': usuario['nome_completo'],
                 'email': usuario['email'],
             }
-            # print(session)
             return redirect(url_for('inicio'))
-            
+        
         else:
             flash('Matricula ou senha incorreta. Ou usuário não cadastrado!', 'danger')
             return redirect(url_for('login'))
-
     return render_template('login.html')
 
 @app.route('/recuperar_senha', methods=['GET', 'POST'])
@@ -264,8 +264,6 @@ def sobre():
 @app.route('/biblioteca/perfil/<string:id>')
 def editar_perfil(id):
     return render_template('editar_perfil.html', id=id)
-
-
 
 def verificaUsuarioLogado(session):
     logado = 'usuario' in session
