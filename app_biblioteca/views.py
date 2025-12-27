@@ -1,9 +1,9 @@
 from app_biblioteca.main import app
 from datetime import date, timedelta
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask import render_template, url_for, redirect, request, flash, session
+from werkzeug.security import generate_password_hash
+from flask import render_template, url_for, redirect, request, flash, session, abort
 from models.operacoes_banco import extrairDados, salvarDados
-from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login
+from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login, verifica_matricula_cadastrada_retorna_email, verifica_usuario_logado
 
 @app.route('/')
 def raiz():
@@ -81,31 +81,22 @@ def login():
 
 @app.route('/recuperar_senha', methods=['GET', 'POST'])
 def recuperar_senha():
-    # ainda falta desenvolver, percorrer a matricula informada. Verificar se a matricula informada já está cadastrada
     if request.method == 'POST':
         matricula = request.form.get('matricula')
 
-        dados_registros = extrairDados('registros')
-        registro_cadastrado = False
-        
-        for registro in dados_registros:
-            if registro['matricula'] == matricula:
-                registro_cadastrado = True
-                email = registro['email']
-        
-        if registro_cadastrado:
+        existe, email = verifica_matricula_cadastrada_retorna_email(matricula)
+        if existe:
             flash(f'E-mail enviado para: {email}! Verifique também sua caixa de spam', 'success')
             return redirect(url_for('recuperar_senha'))
 
         flash('Matricula não encontrada', 'danger')
-        
     return render_template('recuperar_senha.html')
 
 @app.route('/biblioteca')
 def inicio():
-    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
+    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
         flash('Faça o login para acessar o sistema!', 'warning')
-        return redirect(url_for('login'))
+        return redirect(url_for('login')), 302
 
     dados_emprestimos = extrairDados('emprestimos')
     livros_emprestados = []
@@ -113,17 +104,19 @@ def inicio():
     for emprestimo in dados_emprestimos:
         if session['usuario']['matricula'] == emprestimo['matricula_usuario'] and emprestimo['status'] == 'aberto':
             livros_emprestados.append(emprestimo)
-        
-    n_livros_emprestados = len(livros_emprestados)
-
-    return render_template('inicio.html', nome_usuario=session['usuario']['nome_completo'], n_livros_emprestados=n_livros_emprestados,livros_emprestados=livros_emprestados)
+            
+    return render_template('inicio.html', 
+                           nome_usuario=session['usuario']['nome_completo'].split(), 
+                           n_livros_emprestados=len(livros_emprestados),
+                           livros_emprestados=livros_emprestados
+                           )
 
 @app.route('/biblioteca/acervo_digital')
 @app.route('/biblioteca/acervo_digital/<int:pagina>')
 def acervo(pagina=1):
-    if verificaUsuarioLogado(session):
+    if verifica_usuario_logado(session):
         flash('Faça o login para acessar o sistema!', 'warning')
-        return redirect(url_for('login'))
+        return redirect(url_for('login')), 302
     
     dados_livros = extrairDados('livros')
     
@@ -155,7 +148,7 @@ def acervo(pagina=1):
 
 @app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
 def emprestimo_livro(id): 
-    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
+    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
         flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
         return redirect(url_for('login'))
     
@@ -229,7 +222,7 @@ def emprestimo_livro(id):
 
 @app.route('/biblioteca/emprestimos')
 def emprestimos():
-    if verificaUsuarioLogado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
+    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
         flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
         return redirect(url_for('login'))
     
@@ -264,8 +257,3 @@ def sobre():
 @app.route('/biblioteca/perfil/<string:id>')
 def editar_perfil(id):
     return render_template('editar_perfil.html', id=id)
-
-def verificaUsuarioLogado(session):
-    logado = 'usuario' in session
-    return not(logado)
-    # eu tentei colocar a decisão dentro da funmção mas dá erro, num sei pq

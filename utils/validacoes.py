@@ -38,3 +38,15 @@ def realiza_login(matricula, senha):
         if registro['matricula'] == matricula and check_password_hash(registro['senha'], str(senha)):
             return True, registro
     return False, None
+
+def verifica_matricula_cadastrada_retorna_email(matricula):
+    dados_registros = extrairDados('registros')
+    for registro in dados_registros:
+        if registro['matricula'] == matricula:
+            return True, registro['email']
+    return False, None
+
+def verifica_usuario_logado(session):
+    logado = 'usuario' in session
+    return not(logado)
+    # eu tentei colocar a decisão dentro da funmção mas dá erro, num sei pq
