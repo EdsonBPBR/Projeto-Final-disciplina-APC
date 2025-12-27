@@ -86,9 +86,8 @@ def recuperar_senha():
 
         existe, email = verifica_matricula_cadastrada_retorna_email(matricula)
         if existe:
-            flash(f'E-mail enviado para: {email}! Verifique também sua caixa de spam', 'success')
+            flash(f'E-mail enviado para: {email} ! Verifique também sua caixa de spam', 'success')
             return redirect(url_for('recuperar_senha'))
-
         flash('Matricula não encontrada', 'danger')
     return render_template('recuperar_senha.html')
 
