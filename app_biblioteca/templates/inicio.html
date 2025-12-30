@@ -8,7 +8,7 @@
 
 {% block conteudo_main %}
 <div style="display: flex; justify-content: space-between; text-align: center;">
-    <h4 class="fs-7">Olá, {{ nome_usuario }} 👋</h4>
+    <h4 class="fs-7">Olá, {{ nome_usuario[0] }} {{ nome_usuario[-1] }} 👋</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('inicio') }}">Inicio</a></li>

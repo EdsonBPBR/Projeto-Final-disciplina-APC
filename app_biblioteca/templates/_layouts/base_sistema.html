@@ -17,9 +17,12 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow bg-body-tertiary navbar-principal" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow bg-body-tertiary navbar-principal"
+            data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url_for('inicio') }}"><img src="{{ url_for('static', filename='img/imagem_livro.png') }}" width="auto" height="30px" alt="Imagem livros empilhados">  BIBLIOTECA VIRTUAL</a>
+                <a class="navbar-brand" href="{{ url_for('inicio') }}"><img
+                        src="{{ url_for('static', filename='img/imagem_livro.png') }}" width="auto" height="30px"
+                        alt="Imagem livros empilhados"> BIBLIOTECA VIRTUAL</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -28,7 +31,8 @@
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ url_for('acervo') }}">Acervo Digital</a>
+                            <a class="nav-link active" aria-current="page" href="{{ url_for('acervo') }}">Acervo
+                                Digital</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('emprestimos') }}">Empréstimos</a>
@@ -42,7 +46,7 @@
                                 Perfil
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Editar Perfil</a></li> 
+                                <li><a class="dropdown-item" href="#">Editar Perfil</a></li>
                                 <li><a class="dropdown-item" href="{{ url_for('login') }}">Sair</a></li>
                             </ul>
                         </li>
@@ -52,6 +56,18 @@
         </nav>
     </header>
     <main>
+        <!-- sistema de mensagens -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         {% block conteudo_main %}
         {% endblock %}
     </main>
@@ -65,7 +81,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
         crossorigin="anonymous"></script>
-    
+
 </body>
 
 </html>

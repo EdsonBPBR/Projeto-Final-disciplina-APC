@@ -14,8 +14,44 @@
         inset 0 1px 2px rgba(255, 255, 255, 0.2);
 }
 
-.acervo > div > nav {
-    display: flex;
+.acervo {
+    display: grid;
+    grid-template-columns: repeat(5, 15rem);
+    gap: 16px;
     justify-content: center;
-    margin-top: 0;
+}
+
+.card {
+    width: 100%;
+    transition: 0.1s ease-in-out;
+    
+}
+
+.card:hover {
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+    transform: scale(1.005);
+}
+
+@media (max-width: 1200px) {
+    .acervo {
+        grid-template-columns: repeat(4, 15rem);
+    }
+}
+
+@media (max-width: 992px) {
+    .acervo {
+        grid-template-columns: repeat(3, 15rem);
+    }
+}
+
+@media (max-width: 768px) {
+    .acervo {
+        grid-template-columns: repeat(2, 15rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .acervo {
+        grid-template-columns: repeat(1, 15rem);
+    }
 }
