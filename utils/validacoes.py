@@ -1,4 +1,4 @@
-from models.operacoes_banco import extrairDados
+from models.data_utils import extrairDados
 from werkzeug.security import check_password_hash
 
 def verificar_matricula_existente(usuarios, matricula_alvo, index=0):

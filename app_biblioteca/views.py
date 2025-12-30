@@ -2,7 +2,7 @@ from app_biblioteca.main import app
 from datetime import date, timedelta
 from werkzeug.security import generate_password_hash
 from flask import render_template, url_for, redirect, request, flash, session, abort
-from models.operacoes_banco import extrairDados, salvarDados
+from models.data_utils import extrairDados, salvarDados
 from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login, verifica_matricula_cadastrada_retorna_email, verifica_usuario_logado
 
 @app.route('/')
@@ -93,7 +93,7 @@ def recuperar_senha():
 
 @app.route('/biblioteca')
 def inicio():
-    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao
+    if verifica_usuario_logado(session):
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login')), 302
 
@@ -110,46 +110,38 @@ def inicio():
                            livros_emprestados=livros_emprestados
                            )
 
-@app.route('/biblioteca/acervo_digital')
+@app.route('/biblioteca/acervo_digital', methods = ['GET', 'POST'])
 @app.route('/biblioteca/acervo_digital/<int:pagina>')
 def acervo(pagina=1):
     if verifica_usuario_logado(session):
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login')), 302
     
-    dados_livros = extrairDados('livros')
-    
-    # implemetei, pedi ajuda tbm ao chat, como implementar sistema depaginacao com base na matriz montada
-    matriz_livros_cadastrados = []
-    n_linhas = len(dados_livros) // 10
-    resto_livros = len(dados_livros) % 10
-    if resto_livros != 0:
-        n_linhas += 1
-    
-    for i in range(n_linhas):
-        inicio = i * 10
-        fim = inicio + 10
-        linha = dados_livros[inicio:fim]
-        matriz_livros_cadastrados.append(linha)
-    
-    # PAGINAÇÃO: 1 linha da matriz por página (10 livros)
-    total_paginas = n_linhas  # cada página é uma linha da matriz
-    
-    if pagina < 1:
-        pagina = 1
-    elif pagina > total_paginas:
-        pagina = total_paginas
-    
-    # Pegar APENAS UMA LINHA da matriz para esta página
-    matriz_pagina = [matriz_livros_cadastrados[pagina - 1]]  # Apenas a linha da página atual
-    
-    return render_template('acervo.html', matriz_livros=matriz_pagina, pagina_atual=pagina, total_paginas=total_paginas, total_livros=len(dados_livros))
+    dados = extrairDados('livros')
+    if request.method == 'POST':
+        """
+        Sistema de pesquisa somenete por títulos
+        """
+        # inserir sistema de tratamento
+        instancias = []
+        pesquisa_titulo = request.form.get('pesquisa_titulo')
+        
+        for dado in dados:
+            if str(pesquisa_titulo).title() in dado['titulo']:
+                instancias.append(dado)
+                
+        if len(instancias) > 0:
+            return render_template('acervo.html', dados = instancias)
+        else:
+            flash('Nenhum resultado encontrado', 'warning')
+            return redirect(url_for('acervo'))
+    return render_template('acervo.html', dados = dados)
 
 @app.route('/biblioteca/emprestimo/livro/<string:id>', methods = ['GET', 'POST'])
 def emprestimo_livro(id): 
-    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
-        flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
-        return redirect(url_for('login'))
+    if verifica_usuario_logado(session): 
+        flash('Faça o login para acessar o sistema!', 'warning')
+        return redirect(url_for('login')), 302
     
     dados = extrairDados('livros')
     dados_emprestimos = extrairDados('emprestimos')
@@ -256,3 +248,8 @@ def sobre():
 @app.route('/biblioteca/perfil/<string:id>')
 def editar_perfil(id):
     return render_template('editar_perfil.html', id=id)
+
+@app.route('/biblioteca/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('login'))

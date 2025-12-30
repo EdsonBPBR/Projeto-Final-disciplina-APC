@@ -6,6 +6,37 @@
 {% endblock %}
 
 {% block conteudo_main %}
+
+<!-- modal do filtro -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Filtro</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkDefault">
+                    <label class="form-check-label" for="checkDefault">
+                        Disponíveis
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="checkChecked" checked>
+                    <label class="form-check-label" for="checkChecked">
+                        Esgotados
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Aplicar Filtro</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div style="display: flex; justify-content: space-between; text-align: center;">
     <h4 class="fs-7">Acervo Digital</h4>
     <nav aria-label="breadcrumb">
@@ -19,91 +50,40 @@
 
 <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
     <p class="badge-principal">Livros Disponíveis</p>
-    <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Pesquisar por Título" aria-label="Search" />
-        <button class="btn btn-sm btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
-    </form>
+    <div>
+        <form method="post" class="d-flex">
+            <input name="pesquisa_titulo" class="form-control me-2" placeholder="Pesquisar por Título"
+                aria-label="Search" />
+            <button class="btn btn-sm btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+            <button class="btn btn-sm btn-outline-info" style="margin-left: 5px;" data-bs-toggle="modal"
+                data-bs-target="#exampleModal" type="button"><i class="bi bi-filter"></i></button>
+        </form>
+    </div>
 </div>
 
 <section class="acervo">
-    <div>
-        <table class="table table-hover caption-top shadow p-3 mb-5 bg-body-tertiary rounded"
-            style="text-align: center;">
-
-            <thead>
-                <tr class="table-light">
-                    <th scope="col">Código</th>
-                    <th scope="col">Capa</th>
-                    <th scope="col">Titulo</th>
-                    <th scope="col">Autor</th>
-                    <th scope="col">Área do Conhecimento</th>
-                    <th scope="col">Quantidade Disponível</th>
-                    <th scope="col">Situação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for linha in matriz_livros %}
-                {% for livro in linha %}
-                <tr>
-                    <th scope="row">{{ livro['cod'] }}</th>
-                    <td><img src="{{ livro['capa'] }}" width="auto" height="40px" alt="Capa livro"></td> <!--correção: depois alterar para acessar utilizando os arquivos estáticos, pois com o sistema de paginação ele não acessa mais diretamente no diretório nativo, removendo assim quando muda a sessão-->
-                    <td>{{ livro['titulo'] }}</td>
-                    <td>{{ livro['autor'] }}</td>
-                    <td>{{ livro['area_conhecimento'] }}</td>
-                    <td>{{ livro['quantidade'] }}</td>
-                    <td>
-                        {% if livro['status'] == 'disponivel' %}
-                        <a href="{{ url_for('emprestimo_livro', id=livro['cod']) }}">{{ livro['status'].title() }} <i
-                                class="bi bi-check-circle-fill" style="color: darkgreen;"></i></a>
-                        {% else %}
-                        {{ livro['status'].title() }} <i class="bi bi-x-circle-fill" style="color: rgb(251, 5, 5);"></i>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endfor %}
-                {% if not loop.last %}
-                <tr class="table-secondary">
-                    <td colspan="7" style="height: 3px; background-color: #dee2e6;"></td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <!-- Botão Anterior -->
-                <li class="page-item {% if pagina_atual == 1 %}disabled{% endif %}">
-                    <a class="page-link"
-                        href="{{ url_for('acervo', pagina=pagina_atual-1) if pagina_atual > 1 else '#' }}"
-                        aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-
-                <!-- Páginas -->
-                {% for num_pagina in range(1, total_paginas + 1) %}
-                <li class="page-item {% if num_pagina == pagina_atual %}active{% endif %}">
-                    <a class="page-link" href="{{ url_for('acervo', pagina=num_pagina) }}">{{ num_pagina }}</a>
-                </li>
-                {% endfor %}
-
-                <!-- Botão Próximo -->
-                <li class="page-item {% if pagina_atual == total_paginas %}disabled{% endif %}">
-                    <a class="page-link"
-                        href="{{ url_for('acervo', pagina=pagina_atual+1) if pagina_atual < total_paginas else '#' }}"
-                        aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        <div class="text-center text-muted">
-            Página {{ pagina_atual }} de {{ total_paginas }} |
-            Matriz: {{ n_linhas_total }} linhas x 10 colunas |
-            Total: {{ total_livros }} livros
+    {% for dado in dados %}
+    <div class="card">
+        <img src="{{ url_for('static', filename = 'img/capa_livros/'+ dado['capa']) }}" class="card-img-top"
+            alt="Capa livro {{ dado['titulo'] }}">
+        <div class="card-body">
+            <h5 class="card-title">{{ dado['titulo'] }}</h5>
+            <p class="card-text">{{ dado['autor'] }}</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{ dado['area_conhecimento'] }}</li>
+            <li class="list-group-item">{{ dado['biblioteca'] }}</li>
+            <li class="list-group-item">Restantes: <strong>{{ dado['quantidade'] }}</strong></li>
+        </ul>
+        <div class="card-body">
+            <span class="badge text-bg-{% if dado['status'] == 'disponivel' %}success
+                                       {% else %}danger{% endif %}">{{ dado['status'].title() }}</span>
+            {% if dado['status'] == 'disponivel' %}
+            <a href="{{ url_for('emprestimo_livro', id = dado['cod']) }}" class="card-link"><span
+                    class="badge text-bg-primary"><i class="bi bi-book"></i> Resgatar</span></a>
+            {% endif %}
         </div>
     </div>
+    {% endfor %}
 </section>
-
 {% endblock %}

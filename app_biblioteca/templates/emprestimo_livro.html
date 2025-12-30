@@ -15,15 +15,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Deseja confirmar o empréstimo do livro: <strong>{{ livro['titulo'].title() }} </strong> por um período de <strong>15 dias</strong>? 
+                Deseja confirmar o empréstimo do livro: <strong>{{ livro['titulo'].title() }} </strong> por um período
+                de <strong>15 dias</strong>?
                 <hr>
-                <p>Biblioteca UFAL campus Arapiraca Sede</p> <!--futuramente dava para inserir em qual biblioteca dava para obter e a respectiva quantidade na devida biblioteca-->
-                
+                <p>Biblioteca UFAL campus Arapiraca Sede</p>
+                <!--futuramente dava para inserir em qual biblioteca dava para obter e a respectiva quantidade na devida biblioteca-->
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i> Cancelar</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal"><i class="bi bi-x-circle-fill"></i>
+                    Cancelar</button>
                 <form method="post">
-                    <button type="submit" class="btn btn-primary botao"><i class="bi bi-book"></i> Realizar Empréstimo</button>
+                    <button type="submit" class="btn btn-primary botao"><i class="bi bi-book"></i> Realizar
+                        Empréstimo</button>
                 </form> <!--aqui será o real botão de confirmação-->
             </div>
         </div>
@@ -89,7 +93,8 @@
             <div>
                 <h5 style="text-align: center;">
                     {% if livro['permissao_emprestimo'] %}
-                    Limite de emprestimos excedidos! <i class="bi bi-x-circle-fill" style="color: rgb(201, 12, 12);"></i>
+                    Limite de emprestimos excedidos! <i class="bi bi-x-circle-fill"
+                        style="color: rgb(201, 12, 12);"></i>
                     {% else %}
                     Você pode obter esse livro! <i class="bi bi-check-square-fill" style="color: rgb(12, 201, 53);"></i>
                     {% endif %}
@@ -98,7 +103,8 @@
         </div>
 
         <div class="campo-botao">
-            <button type="button" class="btn btn-primary botao" data-bs-toggle="modal" data-bs-target="#exampleModal" {% if livro['permissao_emprestimo'] %} disabled {% endif %}>
+            <button type="button" class="btn btn-primary botao" data-bs-toggle="modal" data-bs-target="#exampleModal" {%
+                if livro['permissao_emprestimo'] %} disabled {% endif %}>
                 Obter Livro
             </button>
         </div>
