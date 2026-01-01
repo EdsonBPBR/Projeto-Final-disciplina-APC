@@ -120,16 +120,35 @@ def acervo(pagina=1):
     dados = extrairDados('livros')
     if request.method == 'POST':
         """
-        Sistema de pesquisa somenete por títulos
+        Sistema de pesquisa e filtro por titulo e status
         """
-        # inserir sistema de tratamento
+        opcao = request.form.get('acao') # busca os valores 'values' dos botões, pois há dois botões em POST
         instancias = []
-        pesquisa_titulo = request.form.get('pesquisa_titulo')
         
-        for dado in dados:
-            if str(pesquisa_titulo).title() in dado['titulo']:
-                instancias.append(dado)
+        if opcao == 'pesquisar_titulo': 
+            try:
+                pesquisa_titulo = request.form.get('pesquisa_titulo')
                 
+                for dado in dados:
+                    if str(pesquisa_titulo).title() in dado['titulo']:
+                        instancias.append(dado)
+                        
+            except Exception as erro:
+                flash(f'Não foi possível realizar pesquisa por título: {erro}', 'danger')
+                return redirect(url_for('acervo'))
+                
+        elif opcao == 'aplicar_filtro':
+            try:
+                status = request.form.get('status')
+                
+                for dado in dados: 
+                    if dado['status'] == status:
+                        instancias.append(dado)
+                        
+            except Exception as erro:
+                flash(f'Não foi possível realizar filtro: {erro}', 'danger')
+                return redirect(url_for('acervo'))              
+            
         if len(instancias) > 0:
             return render_template('acervo.html', dados = instancias)
         else:
