@@ -199,13 +199,11 @@ def emprestimo_livro(id):
         'permissao_emprestimo': not(permissao_emprestimo)
     }
     
-    # implementar o requisito: se o usuário já possui mais de 3 livros cadastrados, a mensagem: 'Você pode obter esse livro! ' tem que alterar conforme o problema do usuário e desativar o botão: 'obter livro'
-    
     if request.method == 'POST':
         livro['quantidade'] = livro['quantidade'] - 1 # decrementa uma unidade a cada empréstimo realizado por usuários
         salvarDados(dados, 'livros') # salvar essa alteração, prestar atenção senão vai fazer como na ultima vez kkk
 
-        flash(f"Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a BIBLIOTECA UFAL ARAPIRACA SEDE para retirada", 'success')
+        flash(f"Emprestimo livro: {livro['titulo']} realizado com sucesso! Vá até a sede para retirada", 'success')
 
         data_emprestimo = date.today()
         data_devolucao = data_emprestimo + timedelta(days=15)
@@ -225,50 +223,78 @@ def emprestimo_livro(id):
         
         dados_livros.append(livro_emprestado) 
         salvarDados(dados_livros, 'emprestimos')
-        # ainda inserir sistema para remover o 
         return redirect(url_for('emprestimos'))
-
     return render_template('emprestimo_livro.html', livro = info_livro)
 
 @app.route('/biblioteca/emprestimos')
 def emprestimos():
-    if verifica_usuario_logado(session): # se na chave 'usuario' não estiver presente no dicionario sessao 
-        flash('Faça o login para acessar o sistema!', 'warning')#  funcao para o emprestimo de somente o livro, o emprestimos to pensando em colocar outra coisa..
+    if verifica_usuario_logado(session): 
+        flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login'))
     
-    # print(session['usuario']['matricula'])
-    livros_emprestados = [] # resolvemos adicionar os livros no dicionario, pois cada livro emprestado é único, não existirá a repetição de outro mesmo livro
+    livros_emprestados = [] 
     # percorrer os livros e se a data de hoje for igual a data de devolução, atualizar o status para 'pendente'
     data_emprestimo = date.today()
     dados_atualizados = False 
-    
     dados_livros = extrairDados('emprestimos')
+    
     for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
         if session['usuario']['matricula'] == registro['matricula_usuario']:
             livros_emprestados.append([registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao'], registro['status']])
         
-        if data_emprestimo.strftime('%d/%m/%Y') == registro['data_devolucao'] and  registro['status'] != 'entregue' :
+        if data_emprestimo.strftime('%d/%m/%Y') == registro['data_devolucao'] and registro['status'] != 'entregue':
             registro['status'] = 'pendente'  # atualizar o status
             dados_atualizados = True
             
     if dados_atualizados:
         salvarDados(dados_livros, 'emprestimos')
 
-    # percorrer os livros e se a data de hoje for igual a data de devolução, atualizar o status para 'pendente'
     if len(livros_emprestados) >= 4:
         flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
-    
     return render_template('emprestimos.html', info_livros_emprestados = livros_emprestados)
 
 @app.route('/biblioteca/sobre')
 def sobre():
     return '<h1>Sobre o projeto da biblioteca online</h1>'
 
-@app.route('/biblioteca/perfil/<string:id>')
+@app.route('/biblioteca/perfil/<string:id>', methods = ['GET', 'POST'])
 def editar_perfil(id):
-    return render_template('editar_perfil.html', id=id)
+    if verifica_usuario_logado(session): 
+        flash('Faça o login para acessar o sistema!', 'warning')
+        return redirect(url_for('login'))
+    
+    try:
+        dados = extrairDados('registros')
+        
+        for dado in dados:
+            if dado['matricula'] == session['usuario']['matricula']:
+                usuario = dado
+                
+        if request.method == 'POST':
+            novo_nome_completo = request.form.get('nome_completo')
+            novo_email = request.form.get('email')
+            
+            usuario['nome_completo'] = novo_nome_completo
+            usuario['email'] = novo_email
+            
+            salvarDados(dados, 'registros')
+            flash('Dados alterados com sucesso!', 'success')
+    except:
+        pass
+    return render_template('editar_perfil.html', dados = usuario)
 
 @app.route('/biblioteca/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
+    
+@app.context_processor
+def inject_usuario():
+    """
+    Função resposável por injetar em TODOS os templates informações do usuário que realizou a sessão. 
+    """
+    usuario = session.get('usuario')
+    return {
+        'usuario_logado': usuario,
+        'matricula_usuario': usuario.get('matricula') if usuario else None
+    }

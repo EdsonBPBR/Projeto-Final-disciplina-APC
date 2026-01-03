@@ -5,17 +5,6 @@
 {% endblock %}
 
 {% block conteudo_main %}
-<!-- sistema de mensagens -->
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
-<div class="alert alert-{{ category }}" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-</div>
-{% endfor %}
-{% endif %}
-{% endwith %}
 
 <div style="display: flex; justify-content: space-between; text-align: center;">
     <h4 class="fs-7">Histórico Livros Emprestados</h4>
@@ -46,14 +35,13 @@
                     <td>{{ livro_emprestado[1] }}</td>
                     <td>{{ livro_emprestado[2] }}</td>
                     <td>{{ livro_emprestado[3] }}</td>
-                    <td>{{ livro_emprestado[4].title() }} 
-
+                    <td>
                         {% if livro_emprestado[4] == 'aberto'  %}
-                        <i class="bi bi-book-fill" style="color: rgb(9, 196, 221);"></i>
+                        <span class="badge text-bg-secondary">{{ livro_emprestado[4].title() }} <i style="color: aliceblue;" class="bi bi-book-fill"></i></span>
                         {% elif livro_emprestado[4]  == 'entregue' %}
-                        <i class="bi bi-check-circle-fill" style="color: darkgreen;"></i>
+                        <span class="badge text-bg-success">{{ livro_emprestado[4].title() }} <i class="bi bi-check-circle-fill" style="color: rgb(255, 255, 255);"></i></span>
                         {% else %}
-                        <i class="bi bi-alarm-fill" style="color: rgb(214, 4, 4);"></i>
+                        <span class="badge text-bg-danger">{{ livro_emprestado[4].title() }} <i class="bi bi-alarm-fill" style="color: rgb(255, 255, 255);"></i></span>
                         {% endif %}
                     </td>
                 </tr>
