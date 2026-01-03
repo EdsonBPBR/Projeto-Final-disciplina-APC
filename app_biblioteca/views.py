@@ -1,9 +1,9 @@
 from app_biblioteca.main import app
 from datetime import date, timedelta
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import render_template, url_for, redirect, request, flash, session, abort
 from models.data_utils import extrairDados, salvarDados
-from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login, verifica_matricula_cadastrada_retorna_email, verifica_usuario_logado
+from utils.validacoes import verificar_matricula_existente, validar_email, realiza_login, verifica_matricula_cadastrada_retorna_email, verifica_usuario_logado, verifica_email_cadastrado
 
 @app.route('/')
 def raiz():
@@ -96,13 +96,17 @@ def inicio():
     if verifica_usuario_logado(session):
         flash('Faça o login para acessar o sistema!', 'warning')
         return redirect(url_for('login')), 302
-
-    dados_emprestimos = extrairDados('emprestimos')
     livros_emprestados = []
     
-    for emprestimo in dados_emprestimos:
-        if session['usuario']['matricula'] == emprestimo['matricula_usuario'] and emprestimo['status'] == 'aberto':
-            livros_emprestados.append(emprestimo)
+    try:
+        dados_emprestimos = extrairDados('emprestimos')
+        for emprestimo in dados_emprestimos:
+            if (session['usuario']['matricula'] == emprestimo['matricula_usuario'] 
+                and emprestimo['status'] == 'aberto'):
+                livros_emprestados.append(emprestimo)
+                
+    except Exception as erro:
+        flash(f'Não foi possível carregar informações: {erro}')
             
     return render_template('inicio.html', 
                            nome_usuario=session['usuario']['nome_completo'].split(), 
@@ -164,7 +168,7 @@ def emprestimo_livro(id):
     
     dados = extrairDados('livros')
     dados_emprestimos = extrairDados('emprestimos')
-    
+
     for registro in dados:
         if registro['cod'] == id:
             livro = registro
@@ -236,32 +240,37 @@ def emprestimos():
     # percorrer os livros e se a data de hoje for igual a data de devolução, atualizar o status para 'pendente'
     data_emprestimo = date.today()
     dados_atualizados = False 
-    dados_livros = extrairDados('emprestimos')
     
-    for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
-        if session['usuario']['matricula'] == registro['matricula_usuario']:
-            livros_emprestados.append([registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao'], registro['status']])
+    try:
+        dados_livros = extrairDados('emprestimos')
         
-        if data_emprestimo.strftime('%d/%m/%Y') == registro['data_devolucao'] and registro['status'] != 'entregue':
-            registro['status'] = 'pendente'  # atualizar o status
-            dados_atualizados = True
+        for registro in dados_livros: # percorrer os livros emprestados para encontrar TODOS os livros emprestados do usuário
+            if session['usuario']['matricula'] == registro['matricula_usuario']:
+                livros_emprestados.append([registro['titulo'], registro['autor'], registro['data_emprestimo'], registro['data_devolucao'], registro['status']])
             
-    if dados_atualizados:
-        salvarDados(dados_livros, 'emprestimos')
+            if data_emprestimo.strftime('%d/%m/%Y') == registro['data_devolucao'] and registro['status'] != 'entregue':
+                registro['status'] = 'pendente'  # atualizar o status
+                dados_atualizados = True
+                
+        if dados_atualizados:
+            salvarDados(dados_livros, 'emprestimos')
 
-    if len(livros_emprestados) >= 4:
-        flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
+        if len(livros_emprestados) >= 4:
+            flash('Você não pode mais obter livros emprestados! Limite excedido!', 'warning')
+            
+    except Exception as erro:
+        flash(f'Não foi possivel carregar os livros emprestados: {erro}')        
     return render_template('emprestimos.html', info_livros_emprestados = livros_emprestados)
 
 @app.route('/biblioteca/sobre')
 def sobre():
     return '<h1>Sobre o projeto da biblioteca online</h1>'
 
-@app.route('/biblioteca/perfil/<string:id>', methods = ['GET', 'POST'])
-def editar_perfil(id):
+@app.route('/biblioteca/perfil/', methods = ['GET', 'POST'])
+def editar_perfil():
     if verifica_usuario_logado(session): 
         flash('Faça o login para acessar o sistema!', 'warning')
-        return redirect(url_for('login'))
+        return redirect(url_for('login')), 302
     
     try:
         dados = extrairDados('registros')
@@ -269,19 +278,57 @@ def editar_perfil(id):
         for dado in dados:
             if dado['matricula'] == session['usuario']['matricula']:
                 usuario = dado
-                
+                break
+        
         if request.method == 'POST':
             novo_nome_completo = request.form.get('nome_completo')
             novo_email = request.form.get('email')
             
-            usuario['nome_completo'] = novo_nome_completo
-            usuario['email'] = novo_email
+            if verifica_email_cadastrado(novo_email, dados):
+                flash('E-mail já cadastrado!', 'warning')
             
-            salvarDados(dados, 'registros')
-            flash('Dados alterados com sucesso!', 'success')
-    except:
-        pass
+            else:
+                usuario['nome_completo'] = novo_nome_completo
+                usuario['email'] = novo_email
+                
+                salvarDados(dados, 'registros')
+                flash('Dados alterados com sucesso!', 'success')
+            
+    except Exception as erro:
+        flash(f'Não foi possível editar perfil: {erro}')
     return render_template('editar_perfil.html', dados = usuario)
+
+@app.route('/biblioteca/perfil/editar_senha/', methods = ['GET', 'POST'])
+def editar_senha():
+    if verifica_usuario_logado(session): 
+        flash('Faça o login para acessar o sistema!', 'warning')
+        return redirect(url_for('login')), 302
+    
+    if request.method == 'POST':
+        senha_atual = request.form.get('senha_atual')
+        nova_senha = request.form.get('nova_senha')
+        confirmar_senha = request.form.get('confirmar_senha')
+        
+        try:
+            dados = extrairDados('registros')
+            for dado in dados:
+                if dado['matricula'] == session['usuario']['matricula']:
+                    usuario = dado
+                    break
+            
+            if check_password_hash(usuario['senha'], str(senha_atual)):
+                if nova_senha == confirmar_senha:
+                    usuario['senha'] = generate_password_hash(str(nova_senha))
+                    salvarDados(dados, 'registros')
+                    flash('Senha alterada com sucesso!', 'success')
+                else:
+                    flash('Senhas não coincidem', 'warning')
+            else:
+                flash('Não foi possível alterar a senha', 'danger')
+                 
+        except Exception as erro:
+            flash(f'Não foi possível alterar senha: {erro}')
+    return render_template('editar_senha.html')
 
 @app.route('/biblioteca/logout')
 def logout():

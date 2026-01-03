@@ -1,10 +1,8 @@
-<!-- irei começar a trabalhar aqui depois, quando eu chegar -->
-<!-- LEMBRANDO QUE, EU AINDA TENHO QUE DEIXAR UM CLEAN CODE EM VIEWS, PQ LA AINDA TÁ UMA BAGACEIRA DO CRANCO -->
 {% extends '_layouts/base_sistema.html' %}
 
 {% block head %}
-<title>Editar Perfil</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style_editar_perfil.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename = 'css/style_editar_senha.css') }}">
+<title>Editar Senha</title>
 {% endblock %}
 
 {% block conteudo_main %}
@@ -12,33 +10,41 @@
     <h4 class="fs-7">Editar Perfil</h4>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url_for('inicio') }}">Voltar</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('editar_perfil') }}">Voltar</a></li>
             <li class="breadcrumb-item active" aria-current="page">Editar Perfil</li>
+            <li class="breadcrumb-item active" aria-current="page">Editar Senha</li>
         </ol>
     </nav>
 </div>
 <hr>
-<p class="badge-principal">{{ dados['matricula']}}</p>
 
 <section>
     <form method="post">
         <div class="mb-3">
-            <label for="nome_completo" class="form-label">Nome Completo</label>
+            <label for="senha_atual" class="form-label">Senha Atual</label>
             <input 
-                name="nome_completo" 
-                type="text" 
+                name="senha_atual" 
+                type="password" 
                 class="form-control"
-                value="{{ dados['nome_completo'] }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">E-mail</label>
-            <input 
-                name="email" 
-                type="email" 
-                class="form-control"
-                value="{{ dados['email'] }}" required>
+                required>
         </div>
         <hr>
+        <div class="mb-3">
+            <label for="nova_senha" class="form-label">Nova Senha</label>
+            <input 
+                name="nova_senha" 
+                type="password" 
+                class="form-control"
+                value="" required>
+        </div>
+        <div class="mb-3">
+            <label for="confirmar_senha" class="form-label">Confirmar Senha</label>
+            <input 
+                name="confirmar_senha" 
+                type="password" 
+                class="form-control"
+                value="" required>
+        </div>
         <a href="{{ url_for('editar_senha', id = matricula_usuario) }}">Editar Senha</a>
         <div class="campo_botoes">
             <button type="submit" class="btn btn-success"><i class="bi bi-floppy"></i> Salvar</button>
