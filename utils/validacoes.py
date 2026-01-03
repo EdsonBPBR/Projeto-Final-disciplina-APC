@@ -33,14 +33,24 @@ def validar_email(email):
     return False
 
 def realiza_login(matricula, senha):
-    dados_usuarios = extrairDados('registros')
+    try:
+        dados_usuarios = extrairDados('registros')
+    except:
+        return False, None
+    
     for registro in dados_usuarios: # busca linear, queda de desempenho, melhorar futuramente com uma nova estrutura de dados
-        if registro['matricula'] == matricula and check_password_hash(registro['senha'], str(senha)):
+        if (registro['matricula'] == matricula 
+            and check_password_hash(registro['senha'], str(senha))):
             return True, registro
     return False, None
-
+    
+   
 def verifica_matricula_cadastrada_retorna_email(matricula):
-    dados_registros = extrairDados('registros')
+    try:
+        dados_registros = extrairDados('registros')
+    except:
+        return False, None
+    
     for registro in dados_registros:
         if registro['matricula'] == matricula:
             return True, registro['email']
@@ -50,3 +60,17 @@ def verifica_usuario_logado(session):
     logado = 'usuario' in session
     return not(logado)
     # eu tentei colocar a decisão dentro da funmção mas dá erro, num sei pq
+    
+def verifica_email_cadastrado(novo_email, dados):
+    """
+    Verifica, quando for editar o perfil, se já existe um e-mail cadastrado
+    
+    :param novo_email: Description
+    :param dados: Description
+    """
+    
+    for dado in dados:
+        if dado['email'] == novo_email:
+            return True
+    return False
+            

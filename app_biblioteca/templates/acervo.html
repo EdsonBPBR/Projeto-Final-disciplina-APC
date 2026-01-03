@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block conteudo_main %}
-
 <!-- modal do filtro -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -16,22 +15,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkDefault">
-                    <label class="form-check-label" for="checkDefault">
-                        Disponíveis
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="checkChecked" checked>
-                    <label class="form-check-label" for="checkChecked">
-                        Esgotados
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Aplicar Filtro</button>
+                <form method="post">
+                    <div class="form-check">
+                        <input class="form-check-input" name="status" type="checkbox" value="disponivel" id="checkDefault">
+                        <label class="form-check-label" for="checkDefault">
+                            Disponíveis
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" name="status" type="checkbox" value="esgotado" id="checkChecked">
+                        <label class="form-check-label" for="checkChecked">
+                            Esgotados
+                        </label>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="submit" name="acao" value="aplicar_filtro" class="btn btn-primary">Aplicar Filtro</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -54,7 +55,7 @@
         <form method="post" class="d-flex">
             <input name="pesquisa_titulo" class="form-control me-2" placeholder="Pesquisar por Título"
                 aria-label="Search" />
-            <button class="btn btn-sm btn-outline-success" type="submit"><i class="bi bi-search"></i></button>
+            <button class="btn btn-sm btn-outline-success" name="acao" value="pesquisar_titulo" type="submit"><i class="bi bi-search"></i></button>
             <button class="btn btn-sm btn-outline-info" style="margin-left: 5px;" data-bs-toggle="modal"
                 data-bs-target="#exampleModal" type="button"><i class="bi bi-filter"></i></button>
         </form>

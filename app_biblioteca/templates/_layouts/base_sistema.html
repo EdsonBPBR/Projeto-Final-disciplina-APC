@@ -46,8 +46,8 @@
                                 Perfil
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Editar Perfil</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('login') }}">Sair</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('editar_perfil', id=matricula_usuario) }}">Editar Perfil</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Sair</a></li>
                             </ul>
                         </li>
                     </ul>
